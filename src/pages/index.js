@@ -1,0 +1,13 @@
+export { default as HomeLayout } from './HomeLayout';
+export { default as Landing } from './Landing';
+export { default as Products } from './Products';
+export { default as Clothes } from './Clothes';
+export { default as Bags } from './Bags';
+export { default as Accessories } from './Accessories';
+export { default as SingleClothes } from './SingleClothes';
+export { default as SingleBag } from './SingleBag';
+export { default as SingleAccessory } from './SingleAccessory';
+export { default as Promotion } from './Promotion';
+export { default as Login } from './Login';
+export { default as Register } from './Register';
+export { default as Errors } from './Errors';
