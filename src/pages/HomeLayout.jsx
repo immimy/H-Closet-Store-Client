@@ -1,12 +1,17 @@
-import { Outlet } from 'react-router-dom';
-import { Footer, Navbar } from '../components';
+import { Outlet, useNavigation } from 'react-router-dom';
+import { Footer, Loading, Navbar } from '../components';
+import { useDispatch } from 'react-redux';
+import { setTheme } from '../features/theme/themeSlice';
 
 const HomeLayout = () => {
-  document.documentElement.setAttribute('data-theme', 'moontheme');
+  useDispatch()(setTheme());
+  const navigation = useNavigation();
+  const isPageLoading = navigation.state === 'loading';
+
   return (
-    <main className='bg-primary h-full'>
+    <main>
       <Navbar />
-      <Outlet />
+      {isPageLoading ? <Loading /> : <Outlet />}
       <Footer />
     </main>
   );

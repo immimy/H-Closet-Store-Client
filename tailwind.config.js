@@ -9,13 +9,13 @@ export default {
     themes: [
       'lofi',
       {
-        suntheme: {
+        sunTheme: {
           primary: '#FFFFFF',
           secondary: '#333333',
           accent: '#B7B7B7',
           neutral: '#EEEEEE',
         },
-        moontheme: {
+        moonTheme: {
           primary: '#333333',
           secondary: '#FFFFFF',
           accent: '#B7B7B7',

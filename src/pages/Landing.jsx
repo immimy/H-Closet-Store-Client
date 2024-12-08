@@ -2,24 +2,41 @@ import { Carousel, Hero, Title } from '../components';
 import { customFetch } from '../utilities/customFetch';
 import { useLoaderData } from 'react-router-dom';
 
-export const loader = async () => {
-  // BEST SELLER
-  const resp_bag = await customFetch('/featured?category=bag');
-  const resp_clothes = await customFetch('/featured?category=clothes');
-  const resp_accessory = await customFetch('/featured?category=accessory');
-
-  const featuredProducts = {
-    // BEST SELLER
-    bags: resp_bag.data.products,
-    clothes: resp_clothes.data.products,
-    accessories: resp_accessory.data.products,
+const featuredProductsQuery = (category) => {
+  return {
+    queryKey: ['featuredProduct', category],
+    queryFn: async () => {
+      const { data } = await customFetch(
+        `/products?category=${category}&featured=true`
+      );
+      return data;
+    },
   };
+};
 
-  return featuredProducts;
+export const loader = (queryClient) => {
+  return async () => {
+    const bagResp = await queryClient.ensureQueryData(
+      featuredProductsQuery('bag')
+    );
+    const clothesResp = await queryClient.ensureQueryData(
+      featuredProductsQuery('clothes')
+    );
+    const accessoryResp = await queryClient.ensureQueryData(
+      featuredProductsQuery('accessory')
+    );
+
+    const featuredBags = bagResp.data.products;
+    const featuredClothes = clothesResp.data.products;
+    const featuredAccessories = accessoryResp.data.products;
+    return { featuredBags, featuredClothes, featuredAccessories };
+  };
 };
 
 const Landing = () => {
-  const { bags, clothes, accessories } = useLoaderData();
+  const { featuredBags, featuredClothes, featuredAccessories } =
+    useLoaderData();
+
   return (
     <div className='align-element mt-8 md:mt-12'>
       {/* HERO */}
@@ -33,15 +50,15 @@ const Landing = () => {
         </div>
         <div className='pt-8'>
           <Title text='clothes' />
-          <Carousel products={clothes} />
+          <Carousel products={featuredClothes} />
         </div>
         <div className='pt-8'>
           <Title text='bags' />
-          <Carousel products={bags} />
+          <Carousel products={featuredBags} />
         </div>
         <div className='pt-8'>
           <Title text='accessories' />
-          <Carousel products={accessories} />
+          <Carousel products={featuredAccessories} />
         </div>
       </section>
     </div>

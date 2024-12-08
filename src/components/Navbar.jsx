@@ -5,8 +5,15 @@ import { navLinks } from '../data';
 import { TfiMenu } from 'react-icons/tfi';
 import { GiShoppingCart } from 'react-icons/gi';
 import { PiUserCircle } from 'react-icons/pi';
+import { FiSun, FiMoon } from 'react-icons/fi';
+// state management
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTheme } from '../features/theme/themeSlice';
 
 const Navbar = () => {
+  const { theme } = useSelector((store) => store.theme);
+  const dispatch = useDispatch();
+
   return (
     <nav id='navbar' className='bg-secondary sticky top-0 w-full z-10'>
       <div className='navbar align-element md:px-12 lg:px-16 transition-all'>
@@ -40,6 +47,18 @@ const Navbar = () => {
         </div>
         {/* NAV END */}
         <div className='navbar-end'>
+          <button
+            type='button'
+            className='mr-3 lg:mr-5'
+            onClick={() => dispatch(toggleTheme())}
+          >
+            {theme === 'sunTheme' ? (
+              <FiSun className='text-xl lg:text-2xl text-primary' />
+            ) : (
+              <FiMoon className='text-xl lg:text-2xl text-primary' />
+            )}
+          </button>
+
           <div className='indicator mr-3 lg:mr-5 btn btn-primary btn-circle btn-sm'>
             <span className='indicator-item badge badge-xs lg:badge-sm badge-accent font-medium'>
               41

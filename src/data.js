@@ -5,9 +5,9 @@ export const navLinks = [
     name: 'products',
     path: '/products',
     subLinks: [
-      { id: 1, name: 'clothes', path: '/products/clothes' },
-      { id: 2, name: 'bags', path: '/products/bags' },
-      { id: 3, name: 'accessories', path: '/products/accessories' },
+      { id: 1, name: 'clothes', path: '/products?category=clothes' },
+      { id: 2, name: 'bag', path: '/products?category=bag' },
+      { id: 3, name: 'accessory', path: '/products?category=accessory' },
     ],
   },
   { id: 3, name: 'checkout', path: '/checkout' },

@@ -5,12 +5,7 @@ import {
   HomeLayout,
   Landing,
   Products,
-  Clothes,
-  Bags,
-  Accessories,
-  SingleClothes,
-  SingleBag,
-  SingleAccessory,
+  SingleProduct,
   Promotion,
   Login,
   Register,
@@ -23,13 +18,14 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 mins
+      staleTime: 1000 * 60 * 30, // 30 mins
     },
   },
 });
 
 // loaders
 import { loader as landingLoader } from './pages/Landing';
+import { loader as ProductsLoader } from './pages/Products';
 
 const router = createBrowserRouter([
   {
@@ -37,14 +33,13 @@ const router = createBrowserRouter([
     element: <HomeLayout />,
     errorElement: <Errors />,
     children: [
-      { index: true, element: <Landing />, loader: landingLoader },
-      { path: '/products', element: <Products /> },
-      { path: '/products/clothes', element: <Clothes /> },
-      { path: '/products/clothes/:id', element: <SingleClothes /> },
-      { path: '/products/bags', element: <Bags /> },
-      { path: '/products/bags/:id', element: <SingleBag /> },
-      { path: '/products/accessories', element: <Accessories /> },
-      { path: '/products/accessories/:id', element: <SingleAccessory /> },
+      { index: true, element: <Landing />, loader: landingLoader(queryClient) },
+      {
+        path: '/products',
+        element: <Products />,
+        loader: ProductsLoader(queryClient),
+      },
+      { path: '/products/:id', element: <SingleProduct /> },
       { path: '/promotion', element: <Promotion /> },
     ],
   },
