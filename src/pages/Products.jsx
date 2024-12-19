@@ -1,4 +1,4 @@
-import { customFetch } from '../utilities/customFetch';
+import { customFetch } from '../utilities';
 import {
   FilterContainer,
   GridDisplay,

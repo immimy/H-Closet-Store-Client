@@ -1,5 +1,5 @@
 import { Carousel, Hero, Title } from '../components';
-import { customFetch } from '../utilities/customFetch';
+import { customFetch } from '../utilities';
 import { useLoaderData } from 'react-router-dom';
 
 const featuredProductsQuery = (category) => {

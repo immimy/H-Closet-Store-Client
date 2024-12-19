@@ -26,6 +26,7 @@ const queryClient = new QueryClient({
 // loaders
 import { loader as landingLoader } from './pages/Landing';
 import { loader as ProductsLoader } from './pages/Products';
+import { loader as SingleProductsLoader } from './pages/SingleProduct';
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,11 @@ const router = createBrowserRouter([
         element: <Products />,
         loader: ProductsLoader(queryClient),
       },
-      { path: '/products/:id', element: <SingleProduct /> },
+      {
+        path: '/products/:id',
+        element: <SingleProduct />,
+        loader: SingleProductsLoader(queryClient),
+      },
       { path: '/promotion', element: <Promotion /> },
     ],
   },

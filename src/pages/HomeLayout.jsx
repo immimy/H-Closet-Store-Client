@@ -11,8 +11,14 @@ const HomeLayout = () => {
   return (
     <main>
       <Navbar />
-      {isPageLoading ? <Loading /> : <Outlet />}
-      <Footer />
+      {isPageLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Outlet />
+          <Footer />
+        </>
+      )}
     </main>
   );
 };

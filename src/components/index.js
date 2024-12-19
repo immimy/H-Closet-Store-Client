@@ -18,3 +18,6 @@ export { default as FormSelect } from './FormSelect';
 export { default as FormRange } from './FormRange';
 export { default as SubmitButton } from './SubmitButton';
 export { default as NotFoundContainer } from './NotFoundContainer';
+export { default as ProductSelect } from './ProductSelect';
+export { default as ProductColorSelect } from './ProductColorSelect';
+export { default as ReviewContainer } from './ReviewContainer';
