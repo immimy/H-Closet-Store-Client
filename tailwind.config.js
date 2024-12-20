@@ -10,16 +10,16 @@ export default {
       'lofi',
       {
         sunTheme: {
-          primary: '#FFFFFF',
-          secondary: '#333333',
-          accent: '#B7B7B7',
+          primary: '#bfb5a9',
+          secondary: '#a69784',
+          accent: '#2a1b08',
           neutral: '#EEEEEE',
         },
         moonTheme: {
-          primary: '#333333',
-          secondary: '#FFFFFF',
-          accent: '#B7B7B7',
-          neutral: '#EEEEEE',
+          primary: '#31363F',
+          secondary: '#222831',
+          accent: '#EEEEEE',
+          neutral: '#76ABAE',
         },
       },
     ],

@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux';
 import { setTheme } from '../features/theme/themeSlice';
 
 const HomeLayout = () => {
-  useDispatch()(setTheme());
+  const dispatch = useDispatch();
+  dispatch(setTheme());
+
   const navigation = useNavigation();
   const isPageLoading = navigation.state === 'loading';
 

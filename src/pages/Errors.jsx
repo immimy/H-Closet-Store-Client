@@ -7,6 +7,7 @@ import { setTheme } from '../features/theme/themeSlice';
 const Errors = () => {
   useDispatch()(setTheme());
   const error = useRouteError();
+  console.log(error);
 
   if (error.status === 404) {
     return (

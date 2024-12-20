@@ -4,7 +4,7 @@ const ProductColorSelect = ({ title, name, options }) => {
   return (
     <div className='form-control w-full'>
       <div className='label capitalize font-semibold'>
-        <span className='label-text text-secondary'>{title}</span>
+        <span className='label-text text-secondary-content'>{title}</span>
       </div>
       <div className='flex flex-wrap gap-2'>
         {options.map((color) => {

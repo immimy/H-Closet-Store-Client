@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
 
-const FormInput = ({ title, name, type }) => {
-  const { searchParams } = useLoaderData();
-  const [value, setValue] = useState(searchParams[name] || '');
+const FormInput = ({ title, name, type, size, searchParams }) => {
+  const [value, setValue] = useState(searchParams?.[name] || '');
 
   return (
     <div className='form-control w-full'>
@@ -12,7 +10,7 @@ const FormInput = ({ title, name, type }) => {
       </div>
       <input
         type={type}
-        className='input input-sm input-bordered rounded-none'
+        className={`input input-${size} input-bordered rounded-none`}
         name={name}
         value={value}
         onChange={(e) => setValue(e.target.value)}

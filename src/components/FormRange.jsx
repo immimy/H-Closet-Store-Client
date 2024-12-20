@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { formattedPrice } from '../utilities/formatting';
-import { useLoaderData } from 'react-router-dom';
 
-const FormRange = ({ title, name }) => {
-  const { searchParams } = useLoaderData();
+const FormRange = ({ title, name, searchParams }) => {
   const minPrice = 0;
   const maxPrice = 200;
   const priceStep = 10;
   const [selectedPrice, setSelectedPrice] = useState(
-    searchParams[name] || maxPrice
+    searchParams?.[name] || maxPrice
   );
 
   return (
@@ -19,7 +17,7 @@ const FormRange = ({ title, name }) => {
       </div>
       <input
         type='range'
-        className='range range-accent'
+        className='range range-neutral'
         name={name}
         min={minPrice}
         max={maxPrice}

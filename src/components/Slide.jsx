@@ -16,7 +16,7 @@ const Slide = ({ product }) => {
       <div className='card-body text-center'>
         <div className='flex items-center justify-center gap-2 sm:flex-col'>
           <h1 className='card-title text-2xl font-semibold'>{name}</h1>
-          <div className='text-sm border px-2 py-0.5 border-secondary w-fit'>
+          <div className='px-2 py-0.5 text-sm font-medium text-accent border border-accent w-fit'>
             $ {formattedPrice(price)}
           </div>
         </div>

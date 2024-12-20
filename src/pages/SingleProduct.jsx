@@ -58,7 +58,7 @@ const SingleProduct = () => {
           />
         </figure>
         <div className='flex flex-col gap-6 md:gap-12 p-8'>
-          <div className='text-secondary tracking-widest flex flex-col gap-2'>
+          <div className='text-secondary-content tracking-widest flex flex-col gap-2'>
             <h1 className='text-4xl lg:text-5xl capitalize font-bold'>
               {name}
             </h1>
@@ -92,7 +92,7 @@ const SingleProduct = () => {
               </>
             )}
           </p>
-          <div className='text-secondary font-medium text-lg mt-4'>
+          <div className='text-secondary-content font-medium text-lg mt-4'>
             <p className='uppercase'>
               Price : <span className='ml-4'>$ {formattedPrice(price)}</span>
             </p>

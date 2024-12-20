@@ -5,4 +5,7 @@ export const customFetch = axios.create({
   headers: {
     Accept: 'application/json',
   },
+  // Initiate credentials mode of request
+  // (cross-site Access-Control request)
+  withCredentials: true,
 });

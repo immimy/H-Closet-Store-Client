@@ -27,13 +27,25 @@ const FilterContainer = () => {
     <Form>
       {/* Filter */}
       <div className='pt-6 pb-10 px-12 rounded-xl bg-neutral grid gap-2 md:gap-4 sm:grid-cols-2 md:grid-cols-4'>
-        <FormInput title='search product' name='search' type='search' />
+        <FormInput
+          title='search product'
+          name='search'
+          type='search'
+          size='sm'
+          searchParams={searchParams}
+        />
         <FormSelect
           title='select category'
           name='category'
           options={categoryOptions}
+          size='sm'
+          searchParams={searchParams}
         />
-        <FormRange title='select price' name='price' />
+        <FormRange
+          title='select price'
+          name='price'
+          searchParams={searchParams}
+        />
         <div className='self-center'>
           <SubmitButton text='search' />
         </div>

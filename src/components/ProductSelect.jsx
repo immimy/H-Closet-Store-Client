@@ -6,7 +6,7 @@ const ProductSelect = ({ title, name, options }) => {
   return (
     <div className='form-control w-full'>
       <div className='label capitalize font-semibold'>
-        <span className='label-text text-secondary'>{title}</span>
+        <span className='label-text text-secondary-content'>{title}</span>
       </div>
       <select
         name={name}

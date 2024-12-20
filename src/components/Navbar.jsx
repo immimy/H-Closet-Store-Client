@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { NavLinks, NavDropdownLinks } from '../components';
 import { navLinks } from '../data';
+
 // icons
 import { TfiMenu } from 'react-icons/tfi';
 import { GiShoppingCart } from 'react-icons/gi';
@@ -9,13 +10,38 @@ import { FiSun, FiMoon } from 'react-icons/fi';
 // state management
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../features/theme/themeSlice';
+import { logoutUser } from '../features/user/userSlice';
+import { customFetch } from '../utilities/customFetch';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const { theme } = useSelector((store) => store.theme);
   const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.user);
+
+  const handleLogout = async () => {
+    await customFetch.get('/auth/logout');
+    dispatch(logoutUser());
+    toast.error('Logged out.');
+  };
 
   return (
     <nav id='navbar' className='bg-secondary sticky top-0 w-full z-10'>
+      {user && (
+        <div className='bg-neutral '>
+          <div className='align-element flex justify-end items-center gap-x-4 md:gap-x-8'>
+            <p className='text-right capitalize text-lg tracking-wider'>
+              welcome, {user.username}!
+            </p>
+            <button
+              className='btn btn-xs btn-link uppercase font-bold'
+              onClick={handleLogout}
+            >
+              log out
+            </button>
+          </div>
+        </div>
+      )}
       <div className='navbar align-element md:px-12 lg:px-16 transition-all'>
         {/* NAV START */}
         <div className='navbar-start'>
@@ -41,7 +67,7 @@ const Navbar = () => {
         </div>
         {/* NAV CENTER */}
         <div className='navbar-center hidden lg:flex'>
-          <ul className='menu menu-horizontal text-primary uppercase font-medium '>
+          <ul className='menu menu-horizontal text-secondary-content uppercase font-medium '>
             <NavLinks links={navLinks} />
           </ul>
         </div>
@@ -53,9 +79,9 @@ const Navbar = () => {
             onClick={() => dispatch(toggleTheme())}
           >
             {theme === 'sunTheme' ? (
-              <FiSun className='text-xl lg:text-2xl text-primary' />
+              <FiSun className='text-xl lg:text-2xl text-secondary-content' />
             ) : (
-              <FiMoon className='text-xl lg:text-2xl text-primary' />
+              <FiMoon className='text-xl lg:text-2xl text-secondary-content' />
             )}
           </button>
 
@@ -65,13 +91,12 @@ const Navbar = () => {
             </span>
             <GiShoppingCart className='text-2xl' />
           </div>
-          <Link
-            to='/login'
-            className='badge badge-primary badge-outline badge-lg'
-          >
-            <p className='uppercase font-medium'>login</p>
-            <PiUserCircle className='text-2xl' />
-          </Link>
+          {!user && (
+            <Link to='/login' className='badge badge-neutral badge-lg'>
+              <p className='uppercase font-medium'>login</p>
+              <PiUserCircle className='text-2xl' />
+            </Link>
+          )}
         </div>
       </div>
     </nav>

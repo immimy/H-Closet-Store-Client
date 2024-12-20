@@ -25,8 +25,14 @@ const queryClient = new QueryClient({
 
 // loaders
 import { loader as landingLoader } from './pages/Landing';
-import { loader as ProductsLoader } from './pages/Products';
-import { loader as SingleProductsLoader } from './pages/SingleProduct';
+import { loader as productsLoader } from './pages/Products';
+import { loader as singleProductsLoader } from './pages/SingleProduct';
+// actions
+import { action as loginAction } from './pages/Login';
+import { action as registerAction } from './pages/Register';
+
+// redux
+import { store } from './store';
 
 const router = createBrowserRouter([
   {
@@ -38,12 +44,12 @@ const router = createBrowserRouter([
       {
         path: '/products',
         element: <Products />,
-        loader: ProductsLoader(queryClient),
+        loader: productsLoader(queryClient),
       },
       {
         path: '/products/:id',
         element: <SingleProduct />,
-        loader: SingleProductsLoader(queryClient),
+        loader: singleProductsLoader(queryClient),
       },
       { path: '/promotion', element: <Promotion /> },
     ],
@@ -52,11 +58,13 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Login />,
     errorElement: <Errors />,
+    action: loginAction(store),
   },
   {
     path: '/register',
     element: <Register />,
     errorElement: <Errors />,
+    action: registerAction,
   },
 ]);
 

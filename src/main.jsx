@@ -8,11 +8,14 @@ import { store } from './store';
 // slider
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+// toast alert
+import { ToastContainer } from 'react-toastify';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
+      <ToastContainer position='top-center' autoClose={3000} />
     </Provider>
   </React.StrictMode>
 );
