@@ -21,3 +21,4 @@ export { default as NotFoundContainer } from './NotFoundContainer';
 export { default as ProductSelect } from './ProductSelect';
 export { default as ProductColorSelect } from './ProductColorSelect';
 export { default as ReviewContainer } from './ReviewContainer';
+export { default as PasswordInput } from './PasswordInput';

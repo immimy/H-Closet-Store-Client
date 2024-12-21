@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const FormInput = ({ title, name, type, size, searchParams }) => {
+const FormInput = ({ title, name, type, size, searchParams, placeholder }) => {
   const [value, setValue] = useState(searchParams?.[name] || '');
 
   return (
@@ -13,6 +13,7 @@ const FormInput = ({ title, name, type, size, searchParams }) => {
         className={`input input-${size} input-bordered rounded-none`}
         name={name}
         value={value}
+        placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
       />
     </div>

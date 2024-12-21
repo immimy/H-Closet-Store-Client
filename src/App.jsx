@@ -10,6 +10,9 @@ import {
   Login,
   Register,
   Errors,
+  EmailVerification,
+  ForgotPassword,
+  ResetPassword,
 } from './pages';
 
 // query client
@@ -27,9 +30,13 @@ const queryClient = new QueryClient({
 import { loader as landingLoader } from './pages/Landing';
 import { loader as productsLoader } from './pages/Products';
 import { loader as singleProductsLoader } from './pages/SingleProduct';
+import { loader as emailVerificationLoader } from './pages/EmailVerification';
+import { loader as resetPasswordLoader } from './pages/ResetPassword';
 // actions
 import { action as loginAction } from './pages/Login';
 import { action as registerAction } from './pages/Register';
+import { action as forgotPasswordAction } from './pages/ForgotPassword';
+import { action as resetPasswordAction } from './pages/ResetPassword';
 
 // redux
 import { store } from './store';
@@ -65,6 +72,25 @@ const router = createBrowserRouter([
     element: <Register />,
     errorElement: <Errors />,
     action: registerAction,
+  },
+  {
+    path: '/user/verify-account',
+    element: <EmailVerification />,
+    errorElement: <Errors />,
+    loader: emailVerificationLoader,
+  },
+  {
+    path: '/user/forgot-password',
+    element: <ForgotPassword />,
+    errorElement: <Errors />,
+    action: forgotPasswordAction,
+  },
+  {
+    path: '/user/reset-password',
+    element: <ResetPassword />,
+    errorElement: <Errors />,
+    loader: resetPasswordLoader,
+    action: resetPasswordAction,
   },
 ]);
 

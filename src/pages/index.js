@@ -6,3 +6,6 @@ export { default as Promotion } from './Promotion';
 export { default as Login } from './Login';
 export { default as Register } from './Register';
 export { default as Errors } from './Errors';
+export { default as EmailVerification } from './EmailVerification';
+export { default as ForgotPassword } from './ForgotPassword';
+export { default as ResetPassword } from './ResetPassword';

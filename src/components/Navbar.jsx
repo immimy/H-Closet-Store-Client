@@ -20,7 +20,7 @@ const Navbar = () => {
   const { user } = useSelector((store) => store.user);
 
   const handleLogout = async () => {
-    await customFetch.get('/auth/logout');
+    await customFetch.delete('/auth/logout');
     dispatch(logoutUser());
     toast.error('Logged out.');
   };
