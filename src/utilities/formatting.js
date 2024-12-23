@@ -1,3 +1,7 @@
 export const formattedPrice = (input) => {
-  return Number(input).toFixed(2);
+  const thaiBaht = new Intl.NumberFormat('th-TH', {
+    style: 'currency',
+    currency: 'THB',
+  });
+  return thaiBaht.format(Number(input));
 };

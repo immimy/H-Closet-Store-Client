@@ -1,17 +1,21 @@
-import { Form, useLoaderData } from 'react-router-dom';
 import { useState } from 'react';
+import { Form, useLoaderData } from 'react-router-dom';
 import {
   ProductSelect,
-  ProductColorSelect,
-  SubmitButton,
+  ProductColorInput,
   ReviewContainer,
+  SubmitButton,
 } from '../components';
 import {
   customFetch,
   formattedPrice,
   generateAmountOptions,
 } from '../utilities';
+import { toast } from 'react-toastify';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
+// state management
+import { useDispatch } from 'react-redux';
+import { addItem } from '../features/cart/cartSlice';
 
 const singleProductQuery = (productID) => {
   return {
@@ -32,20 +36,43 @@ export const loader =
   };
 
 const SingleProduct = () => {
+  const dispatch = useDispatch();
   const { product } = useLoaderData();
+
   const {
-    image,
+    _id: id,
     name,
     category,
-    brand,
     type,
+    brand,
+    image,
     description,
-    price,
     size,
     color,
+    price,
+    inventory,
   } = product;
 
   const [isMoreDesc, setIsMoreDesc] = useState(false);
+
+  // Set up adding data to cart
+  // (color, size, amount props are appended when add product to cart)
+  const cartItem = { id, name, category, image, price };
+  const cartItemData = { option: size || color || null, inventory };
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+
+    if (category === 'bag' && !data.color) {
+      return toast.error('Please select color before add product to cart.');
+    }
+
+    const amount = Number(data.amount);
+    const newCartItem = { ...cartItem, ...data, amount };
+    dispatch(addItem({ cartItem: newCartItem, cartItemData }));
+  };
 
   return (
     <div className='align-element mt-8 md:mt-12 px-8 md:px-16'>
@@ -94,9 +121,15 @@ const SingleProduct = () => {
           </p>
           <div className='text-secondary-content font-medium text-lg mt-4'>
             <p className='uppercase'>
-              Price : <span className='ml-4'>$ {formattedPrice(price)}</span>
+              Price :{' '}
+              <span className='ml-4 tracking-wider'>
+                {formattedPrice(price)}
+              </span>
             </p>
-            <Form className='flex flex-col gap-8 p-2 sm:p-4 md:p-6'>
+            <Form
+              className='flex flex-col gap-8 p-2 sm:p-4 md:p-6'
+              onSubmit={handleAddToCart}
+            >
               <div className='mt-2'>
                 {/* Clothes - size selection */}
                 {category === 'clothes' && (
@@ -104,7 +137,7 @@ const SingleProduct = () => {
                 )}
                 {/* Bag - color selection */}
                 {category === 'bag' && (
-                  <ProductColorSelect
+                  <ProductColorInput
                     title='color'
                     name='color'
                     options={color}

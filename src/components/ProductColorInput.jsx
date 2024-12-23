@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-const ProductColorSelect = ({ title, name, options }) => {
+const ProductColorInput = ({ title, name, options }) => {
   return (
     <div className='form-control w-full'>
       <div className='label capitalize font-semibold'>
@@ -23,4 +21,4 @@ const ProductColorSelect = ({ title, name, options }) => {
     </div>
   );
 };
-export default ProductColorSelect;
+export default ProductColorInput;

@@ -38,7 +38,7 @@ const FilterContainer = () => {
           title='select category'
           name='category'
           options={categoryOptions}
-          size='sm'
+          size='md'
           searchParams={searchParams}
         />
         <FormRange

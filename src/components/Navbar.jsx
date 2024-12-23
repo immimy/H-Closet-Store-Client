@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import { NavLinks, NavDropdownLinks } from '../components';
+import { NavLinks, NavDropdownLinks, CartButton } from '../components';
 import { navLinks } from '../data';
 
 // icons
 import { TfiMenu } from 'react-icons/tfi';
-import { GiShoppingCart } from 'react-icons/gi';
 import { PiUserCircle } from 'react-icons/pi';
 import { FiSun, FiMoon } from 'react-icons/fi';
 // state management
@@ -15,8 +14,8 @@ import { customFetch } from '../utilities/customFetch';
 import { toast } from 'react-toastify';
 
 const Navbar = () => {
-  const { theme } = useSelector((store) => store.theme);
   const dispatch = useDispatch();
+  const { theme } = useSelector((store) => store.theme);
   const { user } = useSelector((store) => store.user);
 
   const handleLogout = async () => {
@@ -27,6 +26,7 @@ const Navbar = () => {
 
   return (
     <nav id='navbar' className='bg-secondary sticky top-0 w-full z-10'>
+      {/* SHOW CURRENT USER & LOGOUT */}
       {user && (
         <div className='bg-neutral '>
           <div className='align-element flex justify-end items-center gap-x-4 md:gap-x-8'>
@@ -45,7 +45,7 @@ const Navbar = () => {
       <div className='navbar align-element md:px-12 lg:px-16 transition-all'>
         {/* NAV START */}
         <div className='navbar-start'>
-          {/* DROPDOWN MENU */}
+          {/* DROPDOWN MENU : hide by default*/}
           <div className='dropdown dropdown-hover lg:hidden'>
             <div tabIndex={0} className='btn btn-secondary btn-circle'>
               <TfiMenu className='text-lg' />
@@ -73,6 +73,7 @@ const Navbar = () => {
         </div>
         {/* NAV END */}
         <div className='navbar-end'>
+          {/* THEME TOGGLE */}
           <button
             type='button'
             className='mr-3 lg:mr-5'
@@ -84,13 +85,9 @@ const Navbar = () => {
               <FiMoon className='text-xl lg:text-2xl text-secondary-content' />
             )}
           </button>
-
-          <div className='indicator mr-3 lg:mr-5 btn btn-primary btn-circle btn-sm'>
-            <span className='indicator-item badge badge-xs lg:badge-sm badge-accent font-medium'>
-              41
-            </span>
-            <GiShoppingCart className='text-2xl' />
-          </div>
+          {/* CART */}
+          <CartButton />
+          {/* LOGIN */}
           {!user && (
             <Link to='/login' className='badge badge-neutral badge-lg'>
               <p className='uppercase font-medium'>login</p>
