@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { NavLinks, NavDropdownLinks, CartButton } from '../components';
+import { NavLinks, NavDropdownLinks, CartModal } from '../components';
 import { navLinks } from '../data';
 
 // icons
@@ -86,7 +86,7 @@ const Navbar = () => {
             )}
           </button>
           {/* CART */}
-          <CartButton />
+          <CartModal />
           {/* LOGIN */}
           {!user && (
             <Link to='/login' className='badge badge-neutral badge-lg'>

@@ -22,7 +22,7 @@ export { default as ProductSelect } from './ProductSelect';
 export { default as ProductColorInput } from './ProductColorInput';
 export { default as ReviewContainer } from './ReviewContainer';
 export { default as PasswordInput } from './PasswordInput';
-export { default as CartButton } from './CartButton';
+export { default as CartModal } from './CartModal';
 export { default as SingleCartItem } from './SingleCartItem';
 export { default as SingleCartItemPanel } from './SingleCartItemPanel';
 export { default as CartSelect } from './CartSelect';

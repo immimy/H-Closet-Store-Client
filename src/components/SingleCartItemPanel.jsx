@@ -1,7 +1,7 @@
 const SingleCartItemPanel = ({ title, data, element }) => {
   return (
-    <div className='flex flex-col'>
-      <h4 className='font-medium text-xs capitalize'>{title}</h4>
+    <div className='flex flex-col text-center gap-y-1'>
+      <h4 className='font-medium text-xs capitalize tracking-wide'>{title}</h4>
       {element ? element : <p className='font-normal tracking-wider'>{data}</p>}
     </div>
   );

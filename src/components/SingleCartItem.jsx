@@ -1,6 +1,5 @@
 import { CartAmount, CartSelect, SingleCartItemPanel } from '../components';
 import { formattedPrice } from '../utilities/formatting';
-import { ImCross } from 'react-icons/im';
 import { useDispatch } from 'react-redux';
 import { removeItem } from '../features/cart/cartSlice';
 
@@ -24,8 +23,9 @@ const SingleCartItem = ({ cart, cartItemsData }) => {
         return (
           <li
             key={`${item.id}_${index}`}
-            className='min-w-max w-screen max-w-md md:max-w-lg flex flex-wrap flex-col md:flex-row md:justify-between gap-y-1 pt-2 pb-2 first:pt-0 last:pb-0 transition-all relative'
+            className='flex flex-col flex-wrap md:flex-row md:justify-between md:gap-x-16 lg:gap-x-32 pt-2 pb-2 first:pt-0 last:pb-0 transition-all relative'
           >
+            {/* HEAD */}
             <div className='flex gap-x-2 sm:gap-x-6 items-center text-left'>
               <img
                 src={image}
@@ -37,7 +37,8 @@ const SingleCartItem = ({ cart, cartItemsData }) => {
                 <h6 className='pt-1 font-normal capitalize'>{category}</h6>
               </div>
             </div>
-            <div className='flex flex-wrap justify-end items-center gap-x-4 tracking-wide leading-6'>
+            {/* TAIL */}
+            <div className='flex flex-wrap justify-end items-center gap-x-4'>
               {size && (
                 <SingleCartItemPanel
                   title='size'
@@ -75,16 +76,13 @@ const SingleCartItem = ({ cart, cartItemsData }) => {
                   />
                 }
               />
-              <SingleCartItemPanel
-                title='subtotal'
-                data={formattedPrice(amount * price)}
-              />
+              {/* REMOVE BUTTON */}
               <button
                 type='button'
-                className='text-error absolute top-2 right-2 md:static'
+                className='uppercase text-xs font-medium tracking-widest text-error absolute top-2 right-2 md:static'
                 onClick={() => handleRemoveCartItem(index)}
               >
-                <ImCross />
+                remove
               </button>
             </div>
           </li>
