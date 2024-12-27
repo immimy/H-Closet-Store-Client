@@ -1,13 +1,10 @@
-import { Link } from 'react-router-dom';
-import { SingleCartItem, Title } from '../components';
+import { SingleCartItemContainer } from '../components';
 import { GiShoppingCart } from 'react-icons/gi';
 import { ImCross } from 'react-icons/im';
 import { useSelector } from 'react-redux';
 
 const CartModal = () => {
-  const { cartItems, cartItemsData, amount, total } = useSelector(
-    (store) => store.cart
-  );
+  const { cartItems } = useSelector((store) => store.cart);
 
   const handleOpenCartModal = () => {
     document.getElementById('cart_modal').showModal();
@@ -18,7 +15,7 @@ const CartModal = () => {
       {/* CART ICON */}
       <div className='indicator mr-3 lg:mr-5'>
         <span className='indicator-item badge badge-xs lg:badge-sm badge-accent font-medium'>
-          {amount}
+          {cartItems.length}
         </span>
         <button
           className='btn btn-primary btn-circle btn-sm'
@@ -40,18 +37,8 @@ const CartModal = () => {
           <h1 className='uppercase text-2xl font-bold pb-2 border-b border-base-content'>
             shopping cart
           </h1>
-          {amount ? (
-            <ul className='px-4 py-2 divide-y divide-base-200'>
-              <SingleCartItem cart={cartItems} cartItemsData={cartItemsData} />
-              <li>
-                <Link
-                  to='/cart'
-                  className='my-4 btn btn-secondary btn-block uppercase font-bold'
-                >
-                  proceed to checkout
-                </Link>
-              </li>
-            </ul>
+          {cartItems.length ? (
+            <SingleCartItemContainer />
           ) : (
             <p className='py-8 text-center tracking-widest font-medium text-3xl capitalize'>
               empty cart

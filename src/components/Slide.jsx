@@ -3,6 +3,7 @@ import { formattedPrice } from '../utilities/formatting';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addItem } from '../features/cart/cartSlice';
+import { getAvailableProducts } from '../utilities';
 
 const Slide = ({ product }) => {
   const dispatch = useDispatch();
@@ -19,24 +20,49 @@ const Slide = ({ product }) => {
     inventory,
   } = product;
 
-  // Set up adding data to cart
-  // (color, size, amount props are appended when add product to cart)
-  const cartItem = { id, name, category, image, price };
-  const cartItemData = { option: size || color || null, inventory };
+  // Product option
+  // - Clothes: size
+  // - Bags: color
+  // - Accessory: none
+  const option = size || color;
 
-  const handleAddToCart = () => {
-    const selectedSize = size?.[0];
-    const selectedColor = color?.[0];
+  // Get only available products
+  // So client cannot add item that is out of stock to cart.
+  const { availableOption, availableInventory } = getAvailableProducts({
+    option,
+    inventory,
+  });
+
+  // Is this single product out of stock?
+  const isOutOfStock = availableInventory.length === 0;
+
+  // Set up data adding to cart
+  let cartItem = {
+    productID: id,
+    name,
+    category,
+    image,
+    price,
+  };
+  let cartItemData = {
+    option: availableOption,
+    inventory: availableInventory,
+  };
+  if (!isOutOfStock) {
+    if (option) {
+      const optionField = size ? 'size' : 'color';
+      cartItem = { ...cartItem, [optionField]: availableOption[0] };
+    }
+    const cartID = `${id}_${availableOption?.[0].toLowerCase() || 'accessory'}`;
+    const numberInStock = availableInventory[0];
     const amount = 1;
 
-    const newCartItem = {
-      ...cartItem,
-      size: selectedSize,
-      color: selectedColor,
-      amount,
-    };
+    cartItem = { ...cartItem, cartID, numberInStock, amount };
+    cartItemData = { ...cartItemData, cartID };
+  }
 
-    dispatch(addItem({ cartItem: newCartItem, cartItemData }));
+  const handleAddToCart = () => {
+    dispatch(addItem({ cartItem, cartItemData }));
   };
 
   return (
@@ -47,7 +73,7 @@ const Slide = ({ product }) => {
         </Link>
       </figure>
       <div className='card-body text-center'>
-        <div className='flex items-center justify-center gap-2 sm:flex-col'>
+        {/* <div className='flex items-center justify-center gap-2 sm:flex-col'>
           <h1 className='card-title text-2xl font-semibold'>
             <Link to={`/products/${id}`}>{name}</Link>
           </h1>
@@ -55,15 +81,30 @@ const Slide = ({ product }) => {
             {formattedPrice(price)}
           </div>
         </div>
-        <p className='text-xl font-normal'>{brand}</p>
+        <p className='text-xl font-normal'>{brand}</p> */}
+        <div className='grid place-items-center gap-y-2'>
+          <h1 className='card-title text-2xl font-semibold'>
+            <Link to={`/products/${id}`}>{name}</Link>
+          </h1>
+          <p className='text-xl font-normal'>{brand}</p>
+          <div className='mt-2 px-2 py-0.5 text-sm font-medium text-accent border border-accent w-fit tracking-wider'>
+            {formattedPrice(price)}
+          </div>
+        </div>
         <div className='card-actions justify-end'>
-          <button
-            type='button'
-            className='btn btn-circle btn-sm btn-secondary text-xl'
-            onClick={handleAddToCart}
-          >
-            <MdAddShoppingCart />
-          </button>
+          {isOutOfStock ? (
+            <h6 className='mt-2 font-normal text-xl tracking-widest capitalize italic text-accent'>
+              out of stock
+            </h6>
+          ) : (
+            <button
+              type='button'
+              className='btn btn-circle btn-sm btn-secondary text-xl'
+              onClick={handleAddToCart}
+            >
+              <MdAddShoppingCart />
+            </button>
+          )}
         </div>
       </div>
     </div>

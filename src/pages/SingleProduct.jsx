@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { Form, useLoaderData } from 'react-router-dom';
 import {
-  ProductSelect,
+  ProductSizeSelect,
   ProductColorInput,
-  ReviewContainer,
+  ProductAmountSelect,
   SubmitButton,
+  ReviewContainer,
 } from '../components';
 import {
   customFetch,
+  getNumberInStockOfSelectedOption,
   formattedPrice,
   generateAmountOptions,
+  getAvailableProducts,
 } from '../utilities';
-import { toast } from 'react-toastify';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
-// state management
+// State management
 import { useDispatch } from 'react-redux';
 import { addItem } from '../features/cart/cartSlice';
 
@@ -37,8 +39,11 @@ export const loader =
 
 const SingleProduct = () => {
   const dispatch = useDispatch();
-  const { product } = useLoaderData();
 
+  // Toggle length of description
+  const [isMoreDesc, setIsMoreDesc] = useState(false);
+
+  const { product } = useLoaderData();
   const {
     _id: id,
     name,
@@ -53,25 +58,59 @@ const SingleProduct = () => {
     inventory,
   } = product;
 
-  const [isMoreDesc, setIsMoreDesc] = useState(false);
+  // Product option
+  // - Clothes: size
+  // - Bags: color
+  // - Accessory: none
+  const option = size || color;
 
-  // Set up adding data to cart
-  // (color, size, amount props are appended when add product to cart)
-  const cartItem = { id, name, category, image, price };
-  const cartItemData = { option: size || color || null, inventory };
+  // Get only available products
+  // So client cannot add item that is out of stock to cart.
+  const { availableOption, availableInventory } = getAvailableProducts({
+    option,
+    inventory,
+  });
+
+  // Is this single product out of stock?
+  const isOutOfStock = availableInventory.length === 0;
+
+  // Limit amount selection not to exceed a number in stock.
+  const [selectedOption, setSelectedOption] = useState(availableOption?.[0]);
+  const numberInStock = getNumberInStockOfSelectedOption({
+    selectedOption,
+    optionArr: option,
+    inventoryArr: inventory,
+  });
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
-
-    if (category === 'bag' && !data.color) {
-      return toast.error('Please select color before add product to cart.');
-    }
-
+    const { size, color } = data;
+    const cartID = `${id}_${
+      size?.toLowerCase() || color?.toLowerCase() || 'accessory'
+    }`;
     const amount = Number(data.amount);
-    const newCartItem = { ...cartItem, ...data, amount };
-    dispatch(addItem({ cartItem: newCartItem, cartItemData }));
+
+    // Set up data adding to cart
+    const cartItem = {
+      cartID,
+      productID: id,
+      name,
+      category,
+      image,
+      price,
+      numberInStock,
+      ...data,
+      amount,
+    };
+    const cartItemData = {
+      cartID,
+      option: availableOption,
+      inventory: availableInventory,
+    };
+
+    dispatch(addItem({ cartItem, cartItemData }));
   };
 
   return (
@@ -119,39 +158,61 @@ const SingleProduct = () => {
               </>
             )}
           </p>
-          <div className='text-secondary-content font-medium text-lg mt-4'>
-            <p className='uppercase'>
-              Price :{' '}
-              <span className='ml-4 tracking-wider'>
-                {formattedPrice(price)}
-              </span>
-            </p>
-            <Form
-              className='flex flex-col gap-8 p-2 sm:p-4 md:p-6'
-              onSubmit={handleAddToCart}
-            >
-              <div className='mt-2'>
-                {/* Clothes - size selection */}
-                {category === 'clothes' && (
-                  <ProductSelect title='size' name='size' options={size} />
-                )}
-                {/* Bag - color selection */}
-                {category === 'bag' && (
-                  <ProductColorInput
-                    title='color'
-                    name='color'
-                    options={color}
-                  />
-                )}
-                <ProductSelect
-                  title='amount'
-                  name='amount'
-                  options={generateAmountOptions(10)}
-                />
+          {isOutOfStock ? (
+            <h6 className='mt-8 text-center font-semibold text-3xl tracking-widest capitalize italic text-accent'>
+              out of stock
+            </h6>
+          ) : (
+            <>
+              <div className='text-secondary-content font-medium text-lg mt-4'>
+                <p className='uppercase'>
+                  Price :
+                  <span className='ml-4 tracking-wider'>
+                    {formattedPrice(price)}
+                  </span>
+                </p>
+                <Form
+                  className='flex flex-col gap-8 p-2 sm:p-4 md:p-6'
+                  onSubmit={handleAddToCart}
+                >
+                  <div className='mt-2'>
+                    {/* Clothes - size selection */}
+                    {category === 'clothes' && (
+                      <ProductSizeSelect
+                        title='size'
+                        name='size'
+                        options={availableOption}
+                        value={selectedOption}
+                        setValue={setSelectedOption}
+                      />
+                    )}
+                    {/* Bag - color selection */}
+                    {category === 'bag' && (
+                      <ProductColorInput
+                        title='color'
+                        name='color'
+                        options={availableOption}
+                        value={selectedOption}
+                        setValue={setSelectedOption}
+                      />
+                    )}
+                    {/* Amount Selection */}
+                    <ProductAmountSelect
+                      title='amount'
+                      name='amount'
+                      options={
+                        numberInStock > 10
+                          ? generateAmountOptions(10)
+                          : generateAmountOptions(numberInStock)
+                      }
+                      numberInStock={numberInStock}
+                    />
+                  </div>
+                  <SubmitButton text='add to cart' />
+                </Form>
               </div>
-              <SubmitButton text='add to cart' />
-            </Form>
-          </div>
+            </>
+          )}
         </div>
       </div>
       <div className='mt-6'>

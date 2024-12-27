@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { formattedPrice } from '../utilities/formatting';
+import { formattedPrice, getAvailableProducts } from '../utilities';
 import { useDispatch } from 'react-redux';
 import { addItem } from '../features/cart/cartSlice';
 
@@ -18,24 +18,49 @@ const Card = ({ item }) => {
     inventory,
   } = item;
 
-  // Set up adding data to cart
-  // (color, size, amount props are appended when add product to cart)
-  const cartItem = { id, name, category, image, price };
-  const cartItemData = { option: size || color || null, inventory };
+  // Product option
+  // - Clothes: size
+  // - Bags: color
+  // - Accessory: none
+  const option = size || color;
 
-  const handleAddToCart = () => {
-    const selectedSize = size?.[0];
-    const selectedColor = color?.[0];
+  // Get only available products
+  // So client cannot add item that is out of stock to cart.
+  const { availableOption, availableInventory } = getAvailableProducts({
+    option,
+    inventory,
+  });
+
+  // Is this single product out of stock?
+  const isOutOfStock = availableInventory.length === 0;
+
+  // Set up data adding to cart
+  let cartItem = {
+    productID: id,
+    name,
+    category,
+    image,
+    price,
+  };
+  let cartItemData = {
+    option: availableOption,
+    inventory: availableInventory,
+  };
+  if (!isOutOfStock) {
+    if (option) {
+      const optionField = size ? 'size' : 'color';
+      cartItem = { ...cartItem, [optionField]: availableOption[0] };
+    }
+    const cartID = `${id}_${availableOption?.[0].toLowerCase() || 'accessory'}`;
+    const numberInStock = availableInventory[0];
     const amount = 1;
 
-    const newCartItem = {
-      ...cartItem,
-      size: selectedSize,
-      color: selectedColor,
-      amount,
-    };
+    cartItem = { ...cartItem, cartID, numberInStock, amount };
+    cartItemData = { ...cartItemData, cartID };
+  }
 
-    dispatch(addItem({ cartItem: newCartItem, cartItemData }));
+  const handleAddToCart = () => {
+    dispatch(addItem({ cartItem, cartItemData }));
   };
 
   return (
@@ -56,13 +81,19 @@ const Card = ({ item }) => {
           <p className='text-sm'>{brand}</p>
         </div>
         <div className='card-actions justify-end self-end'>
-          <button
-            type='button'
-            className='btn btn-neutral btn-sm uppercase text-xs font-bold'
-            onClick={handleAddToCart}
-          >
-            add to cart
-          </button>
+          {isOutOfStock ? (
+            <h6 className='mt-2 font-normal text-lg tracking-wider capitalize italic text-accent'>
+              out of stock
+            </h6>
+          ) : (
+            <button
+              type='button'
+              className='btn btn-neutral btn-sm uppercase text-xs font-bold'
+              onClick={handleAddToCart}
+            >
+              add to cart
+            </button>
+          )}
         </div>
       </div>
     </div>

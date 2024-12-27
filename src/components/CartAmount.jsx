@@ -1,41 +1,30 @@
-import { useState } from 'react';
-import { CiSquareMinus, CiSquarePlus } from 'react-icons/ci';
 import { useDispatch } from 'react-redux';
 import { updateItem } from '../features/cart/cartSlice';
 
-const CartAmount = ({ cartItemIndex, stockNumber, amount }) => {
+const CartAmount = ({ cartID, name, options, amount }) => {
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState(Number(amount));
-
-  const handleAmountChange = (newAmount) => {
-    setValue(newAmount);
-    dispatch(updateItem({ cartItemIndex, newAmount }));
+  const handleAmountChange = (e) => {
+    const newAmount = Number(e.target.value);
+    dispatch(updateItem({ cartID, newAmount }));
   };
 
   return (
-    <div className='flex items-center gap-x-2'>
-      <button
-        type='button'
-        disabled={value === 1}
-        onClick={() => {
-          const decreaseAmount = value - 1;
-          return handleAmountChange(decreaseAmount);
-        }}
+    <div className='form-control w-full'>
+      <select
+        name={name}
+        className='select select-xs select-bordered rounded-none text-black'
+        value={amount}
+        onChange={handleAmountChange}
       >
-        <CiSquareMinus className='text-xl' />
-      </button>
-      <span>{value}</span>
-      <button
-        type='button'
-        disabled={value === stockNumber}
-        onClick={() => {
-          const increaseAmount = value + 1;
-          return handleAmountChange(increaseAmount);
-        }}
-      >
-        <CiSquarePlus className='text-xl' />
-      </button>
+        {options.map((option) => {
+          return (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          );
+        })}
+      </select>
     </div>
   );
 };

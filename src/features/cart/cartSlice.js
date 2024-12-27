@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 
 const initialState = {
   cartItems: [],
   cartItemsData: [],
   amount: 0,
-  total: 0,
+  cartTotal: 0,
+  shippingFee: 50,
+  isCashPayment: false,
+  isGiftService: false,
+  orderTotal: 0,
 };
 
 const cartSlice = createSlice({
@@ -13,65 +18,105 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const { cartItem, cartItemData } = action.payload;
-      const { amount, price } = cartItem;
-      // add item to cart
-      state.cartItems.push(cartItem);
-      state.cartItemsData.push(cartItemData);
-      // calculate cart
-      const payload = { actionCreator: 'addItem', amount, price };
-      cartSlice.caseReducers.calculateCart(state, { payload });
+
+      const product = state.cartItems.find(
+        (item) => item.cartID === cartItem.cartID
+      );
+
+      // If product is already in cart
+      if (product) {
+        product.amount += cartItem.amount;
+        cartSlice.caseReducers.checkItemCondition(state, {
+          payload: { cartID: product.cartID },
+        });
+      } else {
+        // If product is not in cart
+        state.cartItems.push(cartItem);
+        state.cartItemsData.push(cartItemData);
+      }
+
+      // Calculate cart
+      cartSlice.caseReducers.calculateCart(state);
     },
     updateItem: (state, action) => {
-      const { cartItemIndex, newSelectedSize, newSelectedColor, newAmount } =
+      const { cartID, newSelectedOption, newNumberInStock, newAmount } =
         action.payload;
-      // update cart item
-      if (newSelectedSize) {
-        state.cartItems[cartItemIndex].size = newSelectedSize;
+      const product = state.cartItems.find((item) => item.cartID === cartID);
+
+      // Change product option
+      if (newSelectedOption) {
+        const newCartID = `${product.productID}_${newSelectedOption}`;
+        const newProduct = state.cartItems.find(
+          (item) => item.cartID === newCartID
+        );
+        // If new product is already in cart
+        if (newProduct) {
+          newProduct.amount += product.amount;
+          cartSlice.caseReducers.checkItemCondition(state, {
+            payload: { cartID: newCartID },
+          });
+          cartSlice.caseReducers.removeItem(state, { payload: { cartID } });
+        } else {
+          // If new product is not in cart
+          const changedField = newSelectedOption.includes('#')
+            ? 'color'
+            : 'size';
+          product[changedField] = newSelectedOption;
+          product.cartID = newCartID;
+          product.numberInStock = newNumberInStock;
+          if (product.amount > product.numberInStock) {
+            product.amount = product.numberInStock;
+            toast.error('Item amount in cart reaches up to a number in stock.');
+            cartSlice.caseReducers.calculateCart(state);
+          }
+        }
       }
-      if (newSelectedColor) {
-        state.cartItems[cartItemIndex].color = newSelectedColor;
-      }
+
+      // Change amount of item
       if (newAmount) {
-        const oldAmount = state.cartItems[cartItemIndex].amount;
-        state.cartItems[cartItemIndex].amount = newAmount;
-        const updatedAmount = state.cartItems[cartItemIndex].amount;
-        // calculate cart when amount change
-        const payload = {
-          actionCreator: 'updateItem',
-          oldAmount,
-          updatedAmount,
-          price: state.cartItems[cartItemIndex].price,
-        };
-        cartSlice.caseReducers.calculateCart(state, { payload });
+        product.amount = newAmount;
+        cartSlice.caseReducers.calculateCart(state);
       }
     },
     removeItem: (state, action) => {
-      const { cartItemIndex } = action.payload;
-      const { amount, price } = state.cartItems[cartItemIndex];
-      // remove cart item
-      state.cartItems.splice(cartItemIndex, 1);
-      state.cartItemsData.splice(cartItemIndex, 1);
-      // calculate cart
-      const payload = { actionCreator: 'removeItem', amount, price };
-      cartSlice.caseReducers.calculateCart(state, { payload });
+      const { cartID } = action.payload;
+      state.cartItems = state.cartItems.filter(
+        (item) => item.cartID !== cartID
+      );
+      state.cartItemsData = state.cartItemsData.filter(
+        (item) => item.cartID !== cartID
+      );
+      cartSlice.caseReducers.calculateCart(state);
     },
-    calculateCart: (state, action) => {
-      const { actionCreator } = action.payload;
+    calculateCart: (state) => {
+      const cartItems = state.cartItems;
 
-      if (actionCreator === 'addItem') {
-        const { amount, price } = action.payload;
-        state.amount += amount;
-        state.total += amount * price;
+      const { amount, total } = cartItems.reduce(
+        (acc, item) => {
+          const { amount, price } = item;
+          acc.amount += amount;
+          acc.total += amount * price;
+          return acc;
+        },
+        { amount: 0, total: 0 }
+      );
+
+      state.amount = amount;
+      state.cartTotal = total;
+    },
+    checkItemCondition: (state, action) => {
+      const { cartID } = action.payload;
+      const product = state.cartItems.find((item) => item.cartID === cartID);
+
+      // Single cart item must not exceed number in stock.
+      if (product.amount > product.numberInStock) {
+        product.amount = product.numberInStock;
+        toast.error('Item amount in cart reaches up to a number in stock.');
       }
-      if (actionCreator === 'removeItem') {
-        const { amount, price } = action.payload;
-        state.amount -= amount;
-        state.total -= amount * price;
-      }
-      if (actionCreator === 'updateItem') {
-        const { oldAmount, updatedAmount, price } = action.payload;
-        state.amount += updatedAmount - oldAmount;
-        state.total += (updatedAmount - oldAmount) * price;
+      // Single cart item is limited to 10 items per order.
+      if (product.amount > 10) {
+        product.amount = 10;
+        toast.error('Each item is limited to 10 quantities per order.');
       }
     },
   },

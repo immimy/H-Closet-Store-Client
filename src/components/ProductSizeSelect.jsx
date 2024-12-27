@@ -1,8 +1,4 @@
-import { useState } from 'react';
-
-const ProductSelect = ({ title, name, options }) => {
-  const [value, setValue] = useState(options[0]);
-
+const ProductSizeSelect = ({ title, name, options, value, setValue }) => {
   return (
     <div className='form-control w-full'>
       <div className='label capitalize font-semibold'>
@@ -15,14 +11,10 @@ const ProductSelect = ({ title, name, options }) => {
         onChange={(e) => setValue(e.target.value)}
       >
         {options.map((option) => {
-          return (
-            <option key={option}>
-              {typeof option === 'string' ? option.toUpperCase() : option}
-            </option>
-          );
+          return <option key={option}>{option.toUpperCase()}</option>;
         })}
       </select>
     </div>
   );
 };
-export default ProductSelect;
+export default ProductSizeSelect;

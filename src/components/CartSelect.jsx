@@ -1,28 +1,31 @@
-import { useState } from 'react';
+import { getNumberInStockOfSelectedOption } from '../utilities';
 import { useDispatch } from 'react-redux';
 import { updateItem } from '../features/cart/cartSlice';
 
 const CartSelect = ({
-  cartItemIndex,
+  cartID,
   name,
   options,
+  inventory,
   selectedSize,
   selectedColor,
 }) => {
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState(selectedSize || selectedColor);
-
   const handleProductOptionChange = (e) => {
-    const fieldChange =
-      e.target.name === 'size' ? 'newSelectedSize' : 'newSelectedColor';
+    const newSelectedOption = e.target.value.toLowerCase();
+    const newNumberInStock = getNumberInStockOfSelectedOption({
+      selectedOption: newSelectedOption,
+      optionArr: options,
+      inventoryArr: inventory,
+    });
     dispatch(
       updateItem({
-        [fieldChange]: e.target.value,
-        cartItemIndex,
+        cartID,
+        newSelectedOption,
+        newNumberInStock,
       })
     );
-    setValue(e.target.value);
   };
 
   return (
@@ -36,12 +39,16 @@ const CartSelect = ({
             color: selectedColor,
           }
         }
-        value={value}
+        value={selectedSize || selectedColor}
         onChange={handleProductOptionChange}
       >
         {options.map((option) => {
           if (name === 'size') {
-            return <option key={option}>{option.toUpperCase()}</option>;
+            return (
+              <option key={option} value={option}>
+                {option.toUpperCase()}
+              </option>
+            );
           }
           if (name === 'color') {
             return (
