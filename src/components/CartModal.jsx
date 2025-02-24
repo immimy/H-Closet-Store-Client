@@ -26,10 +26,13 @@ const CartModal = () => {
       </div>
       {/* CART MODAL */}
       <dialog id='cart_modal' className='modal modal-top sm:modal-middle'>
-        <div className='modal-box rounded-none bg-base-300 text-base-content min-w-max'>
+        <div className='modal-box rounded-none bg-base-300 text-base-content min-w-max md:px-12'>
           <div className='modal-action'>
             <form method='dialog'>
-              <button className='absolute top-6 right-8 sm:right-6'>
+              <button
+                id='cart_modal-close_button'
+                className='absolute top-6 right-8 sm:right-6'
+              >
                 <ImCross />
               </button>
             </form>

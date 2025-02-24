@@ -11,13 +11,15 @@ const HomeLayout = () => {
   const isPageLoading = navigation.state === 'loading';
 
   return (
-    <main>
+    <main className='min-h-screen flex flex-col'>
       <Navbar />
       {isPageLoading ? (
         <Loading />
       ) : (
         <>
-          <Outlet />
+          <div className='flex-1'>
+            <Outlet />
+          </div>
           <Footer />
         </>
       )}

@@ -31,14 +31,14 @@ const FilterContainer = () => {
           title='search product'
           name='search'
           type='search'
-          size='sm'
+          size='input-sm'
           searchParams={searchParams}
         />
         <FormSelect
           title='select category'
           name='category'
           options={categoryOptions}
-          size='md'
+          size='select-sm'
           searchParams={searchParams}
         />
         <FormRange

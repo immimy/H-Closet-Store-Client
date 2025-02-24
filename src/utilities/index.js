@@ -1,5 +1,5 @@
 export { customFetch } from './customFetch';
-export { formattedPrice } from './formatting';
+export { formattedPrice, formattedDateAndTime } from './formatting';
 export { generateAmountOptions } from './generateAmountOptions';
 export {
   deleteUnavailableOption,

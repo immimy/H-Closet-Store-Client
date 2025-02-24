@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Form, Link, redirect } from 'react-router-dom';
 import { PasswordInput, FormInput, SubmitButton } from '../components';
 import { customFetch } from '../utilities/customFetch';
@@ -40,12 +39,7 @@ const Login = () => {
             login
           </h1>
           <div className='flex flex-col gap-y-4'>
-            <FormInput
-              title='username / email'
-              name='identifier'
-              type='text'
-              size='md'
-            />
+            <FormInput title='username / email' name='identifier' type='text' />
             <PasswordInput title='password' name='password' />
             <Link
               to='/user/forgot-password'

@@ -10,7 +10,7 @@ const FormSelect = ({ title, name, options, size, searchParams }) => {
       </div>
       <select
         name={name}
-        className={`select select-${size} select-bordered rounded-none`}
+        className={`select ${size} select-bordered rounded-none`}
         value={value}
         onChange={(e) => setValue(e.target.value)}
       >

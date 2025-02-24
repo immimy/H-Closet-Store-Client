@@ -3,7 +3,13 @@ import { formattedPrice, generateAmountOptions } from '../utilities';
 import { useDispatch } from 'react-redux';
 import { removeItem } from '../features/cart/cartSlice';
 
-const SingleCartItem = ({ cartItem, cartItemData }) => {
+const SingleCartItem = ({
+  cartItem,
+  cartItemData,
+  confirmOrder,
+  showSubtotal,
+  oneItemLeftInCart,
+}) => {
   const dispatch = useDispatch();
 
   const {
@@ -17,7 +23,9 @@ const SingleCartItem = ({ cartItem, cartItemData }) => {
     amount,
     numberInStock,
   } = cartItem;
-  const { option, inventory } = cartItemData;
+  const option = cartItemData?.option;
+  const inventory = cartItemData?.inventory;
+  // const { option, inventory } = cartItemData;
 
   const handleRemoveCartItem = (cartID) => {
     dispatch(removeItem({ cartID }));
@@ -25,7 +33,7 @@ const SingleCartItem = ({ cartItem, cartItemData }) => {
 
   return (
     <div>
-      <div className='flex flex-col flex-wrap md:flex-row md:justify-between md:gap-x-32 lg:gap-x-64 transition-all relative'>
+      <div className='flex flex-col gap-y-3 md:flex-row md:justify-between md:gap-x-12 lg:gap-x-24 transition-all relative'>
         {/* HEAD */}
         <div className='flex gap-x-2 sm:gap-x-6 items-center text-left'>
           <img
@@ -39,62 +47,89 @@ const SingleCartItem = ({ cartItem, cartItemData }) => {
           </div>
         </div>
         {/* TAIL */}
-        <div className='flex flex-wrap justify-end items-center gap-x-4'>
+        <div className='grid grid-flow-col auto-cols-[minmax(max-content,60px)] justify-end gap-x-2'>
+          {/* SIZE */}
           {size && (
             <SingleCartItemPanel
               title='size'
+              data={confirmOrder && size.toUpperCase()}
               element={
-                <CartSelect
-                  cartID={cartID}
-                  name='size'
-                  options={option}
-                  inventory={inventory}
-                  selectedSize={size.toLowerCase()}
-                />
+                !confirmOrder && (
+                  <CartSelect
+                    cartID={cartID}
+                    name='size'
+                    options={option}
+                    inventory={inventory}
+                    selectedSize={size.toLowerCase()}
+                  />
+                )
               }
             />
           )}
+          {/* COLOR */}
           {color && (
             <SingleCartItemPanel
               title='color'
               element={
-                <CartSelect
-                  cartID={cartID}
-                  name='color'
-                  options={option}
-                  inventory={inventory}
-                  selectedColor={color.toLowerCase()}
-                />
+                confirmOrder ? (
+                  <div
+                    className={`w-10 h-6 shadow-inner]`}
+                    style={{ backgroundColor: color }}
+                  />
+                ) : (
+                  <CartSelect
+                    cartID={cartID}
+                    name='color'
+                    options={option}
+                    inventory={inventory}
+                    selectedColor={color.toLowerCase()}
+                  />
+                )
               }
             />
           )}
+          {/* PRICE */}
           <SingleCartItemPanel title='price' data={formattedPrice(price)} />
+          {/* AMOUNT */}
           <SingleCartItemPanel
             title='amount'
+            data={confirmOrder && amount}
             element={
-              <CartAmount
-                cartID={cartID}
-                name='amount'
-                options={
-                  numberInStock > 10
-                    ? generateAmountOptions(10)
-                    : generateAmountOptions(numberInStock)
-                }
-                amount={Number(amount)}
-              />
+              !confirmOrder && (
+                <CartAmount
+                  cartID={cartID}
+                  name='amount'
+                  options={
+                    numberInStock > 10
+                      ? generateAmountOptions(10)
+                      : generateAmountOptions(numberInStock)
+                  }
+                  amount={Number(amount)}
+                />
+              )
             }
           />
+          {/* SUBTOTAL */}
+          {showSubtotal && (
+            <SingleCartItemPanel
+              title='subtotal'
+              data={formattedPrice(price * amount)}
+            />
+          )}
           {/* REMOVE BUTTON */}
-          <button
-            type='button'
-            className='uppercase text-xs font-medium tracking-widest text-error absolute top-2 right-2 md:static'
-            onClick={() => handleRemoveCartItem(cartID)}
-          >
-            remove
-          </button>
+          {!confirmOrder && (
+            <button
+              type='button'
+              className='uppercase text-xs font-medium tracking-widest text-error absolute top-2 right-2 md:static'
+              onClick={() => handleRemoveCartItem(cartID)}
+              disabled={oneItemLeftInCart}
+            >
+              remove
+            </button>
+          )}
         </div>
       </div>
-      {!(numberInStock > 10) && (
+      {!(numberInStock > 10) && !confirmOrder && (
         <span className='pt-2 uppercase italic flex justify-end tracking-widest text-sm font-medium'>
           {numberInStock} available items
         </span>

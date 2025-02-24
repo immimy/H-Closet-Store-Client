@@ -1,7 +1,18 @@
 import { useState } from 'react';
 
-const FormInput = ({ title, name, type, size, searchParams, placeholder }) => {
-  const [value, setValue] = useState(searchParams?.[name] || '');
+const FormInput = ({
+  title,
+  name,
+  type,
+  size,
+  searchParams,
+  placeholder,
+  required,
+  defaultValue,
+}) => {
+  const [value, setValue] = useState(
+    searchParams?.[name] || defaultValue || ''
+  );
 
   return (
     <div className='form-control w-full'>
@@ -10,11 +21,12 @@ const FormInput = ({ title, name, type, size, searchParams, placeholder }) => {
       </div>
       <input
         type={type}
-        className={`input input-${size} input-bordered rounded-none`}
+        className={`input ${size} input-bordered rounded-none`}
         name={name}
         value={value}
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
+        required={required}
       />
     </div>
   );

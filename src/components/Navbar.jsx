@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NavLinks, NavDropdownLinks, CartModal } from '../components';
 import { navLinks } from '../data';
 
@@ -12,15 +12,22 @@ import { toggleTheme } from '../features/theme/themeSlice';
 import { logoutUser } from '../features/user/userSlice';
 import { customFetch } from '../utilities/customFetch';
 import { toast } from 'react-toastify';
+import { clearCart } from '../features/cart/cartSlice';
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const { theme } = useSelector((store) => store.theme);
   const { user } = useSelector((store) => store.user);
 
+  // Remove log out button when client is in Cart or Checkout page
+  const location = useLocation();
+  const disableLogoutRoutes = ['/cart', '/checkout'];
+  const disableLogout = disableLogoutRoutes.includes(location.pathname);
+
   const handleLogout = async () => {
     await customFetch.delete('/auth/logout');
     dispatch(logoutUser());
+    dispatch(clearCart());
     toast.error('Logged out.');
   };
 
@@ -33,12 +40,14 @@ const Navbar = () => {
             <p className='text-right capitalize text-lg tracking-wider'>
               welcome, {user.username}!
             </p>
-            <button
-              className='btn btn-xs btn-link uppercase font-bold'
-              onClick={handleLogout}
-            >
-              log out
-            </button>
+            {!disableLogout && (
+              <button
+                className='btn btn-xs btn-link uppercase font-bold'
+                onClick={handleLogout}
+              >
+                log out
+              </button>
+            )}
           </div>
         </div>
       )}

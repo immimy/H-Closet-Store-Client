@@ -1,6 +1,10 @@
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const NavLinks = ({ links }) => {
+  const { user } = useSelector((store) => store.user);
+  const displayWhenLoginRoutes = ['/orders'];
+
   const handleMouseLeavingProductsMenu = (e) => {
     // select element
     const products = document.getElementById('navProducts');
@@ -29,6 +33,9 @@ const NavLinks = ({ links }) => {
     <>
       {links.map((link) => {
         const { id, name, path, subLinks } = link;
+
+        // Display only when user already log in
+        if (!user && displayWhenLoginRoutes.includes(path)) return;
 
         // WITH DROPDOWN
         if (subLinks) {

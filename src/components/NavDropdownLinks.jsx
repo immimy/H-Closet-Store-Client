@@ -1,10 +1,17 @@
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 const NavDropdownLinks = ({ links }) => {
+  const { user } = useSelector((store) => store.user);
+  const displayWhenLoginRoutes = ['/orders'];
+
   return (
     <>
       {links.map((link) => {
         const { id, name, path, subLinks } = link;
+
+        // Display only when user already log in
+        if (!user && displayWhenLoginRoutes.includes(path)) return;
 
         // WITH SUB LINKS
         if (subLinks) {

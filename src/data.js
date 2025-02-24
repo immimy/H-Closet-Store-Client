@@ -10,6 +10,5 @@ export const navLinks = [
       { id: 3, name: 'accessory', path: '/products?category=accessory' },
     ],
   },
-  { id: 3, name: 'checkout', path: '/checkout' },
-  { id: 4, name: 'orders', path: '/orders' },
+  { id: 3, name: 'orders', path: '/orders' },
 ];

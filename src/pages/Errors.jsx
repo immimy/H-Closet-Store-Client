@@ -48,6 +48,12 @@ const Errors = () => {
           <p className='text-primary-content'>
             Sorry, we are currently fixing the issues...
           </p>
+          <Link
+            to='/'
+            className='btn bg-[#F50035] text-[#FFF] hover:text-[#333] uppercase'
+          >
+            go back home
+          </Link>
         </div>
       </div>
     </main>
