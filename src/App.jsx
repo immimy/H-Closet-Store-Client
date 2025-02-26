@@ -53,15 +53,10 @@ import { action as cartAction } from './pages/Cart';
 import { store } from './store';
 
 // stripe
-import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 const stripePromise = loadStripe(
   'pk_test_51OvGfIP7SK6yH568WZiu6JrtBIopOwGr2YsEdkYOvt5SBU8I8trqXxlZXuhPcjDcIu4HRrqKva7n1qGbh2JGiTft005FhDO75Y'
 );
-const options = {
-  mode: 'setup',
-  currency: 'thb',
-};
 
 const router = createBrowserRouter([
   {
@@ -147,9 +142,7 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Elements stripe={stripePromise} options={options}>
-        <RouterProvider router={router} />
-      </Elements>
+      <RouterProvider router={router} />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

@@ -6,3 +6,4 @@ export {
   getAvailableProducts,
   getNumberInStockOfSelectedOption,
 } from './cart';
+export { getCountdownTime } from './countdown';

@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
-import { customFetch } from '../utilities';
+import { customFetch, getCountdownTime } from '../utilities';
 import { VscError } from 'react-icons/vsc';
 import { BiErrorCircle } from 'react-icons/bi';
 import {
@@ -47,6 +48,36 @@ const SingleOrder = () => {
   const placedOrderStatus = ['Ordered', 'Packed', 'In Transit', 'Delivered'];
   const statusIndex = placedOrderStatus.indexOf(status);
 
+  // Set up countdown clock
+  const countDownDate =
+    new Date(order.createdAt).getTime() + 1000 * 60 * 60 * 24;
+  const [countdownTime, setCountdownTime] = useState(
+    getCountdownTime(countDownDate - Date.now())
+  );
+
+  useEffect(() => {
+    // Update the countdown every 1 second
+    const intID = setInterval(() => {
+      // Set countdown only for 'Pending' order
+      if (status !== 'Pending') return clearInterval(intID);
+
+      const duration = countDownDate - Date.now();
+
+      if (duration < 0) {
+        return () => {
+          clearInterval(intID);
+          setCountdownTime({ hour: 0, minute: 0, second: 0 });
+        };
+      }
+
+      setCountdownTime(getCountdownTime(duration));
+    }, 1000);
+
+    return () => {
+      clearInterval(intID);
+    };
+  }, []);
+
   return (
     <div className='align-element'>
       {/* ORDER STATUS ALERT */}
@@ -70,6 +101,7 @@ const SingleOrder = () => {
               checkout
             </Link>
           }
+          countdownTime={countdownTime}
         />
       )}
       {/* ORDER STATUS STEP */}

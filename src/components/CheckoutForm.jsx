@@ -13,6 +13,7 @@ import {
   useStripe,
 } from '@stripe/react-stripe-js';
 import { clearCart, deleteOrder } from '../features/cart/cartSlice';
+import { customFetch } from '../utilities';
 
 const CheckoutForm = ({ store }) => {
   const { orderID, clientSecret, continueOrder } = useLoaderData();
@@ -82,11 +83,25 @@ const CheckoutForm = ({ store }) => {
   const handleCancel = () => {
     return blocker.reset();
   };
-  const handleConfirmLeave = () => {
+  const handleConfirmLeave = async () => {
     if (orderID && clientSecret) {
       store.dispatch(
         deleteOrder({ orderID, clientSecret, orderStatus: 'Failed' })
       );
+    }
+    if (continueOrder) {
+      try {
+        const { _id: orderID, clientSecret } = continueOrder;
+        await customFetch.patch(`/orders/${orderID}`, {
+          clientSecret,
+          status: 'Failed',
+        });
+      } catch (error) {
+        const errorMessage =
+          error?.response?.data?.msg ||
+          'Something went wrong, please try cancel order again later.';
+        toast.error(errorMessage);
+      }
     }
     return blocker.proceed();
   };

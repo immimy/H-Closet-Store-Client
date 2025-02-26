@@ -7,8 +7,8 @@ import {
 import { useSelector } from 'react-redux';
 import { redirect, useLoaderData } from 'react-router-dom';
 import { customFetch } from '../utilities';
-import { Elements } from '@stripe/react-stripe-js';
 import { toast } from 'react-toastify';
+import { Elements } from '@stripe/react-stripe-js';
 
 export const loader = (store) => {
   return async ({ request }) => {
@@ -79,8 +79,11 @@ const Checkout = ({ store, stripePromise }) => {
 
   // Stripe options
   const { theme } = useSelector((store) => store.theme);
-  const appearance = { theme: theme === 'sunTheme' ? 'flat' : 'night' };
-  const loader = 'auto';
+  const options = {
+    clientSecret,
+    appearance: { theme: theme === 'sunTheme' ? 'flat' : 'night' },
+    loader: 'auto',
+  };
 
   return (
     <div className='align-element py-8 lg:py-16 text-secondary-content lg:grid lg:grid-cols-3'>
@@ -103,10 +106,7 @@ const Checkout = ({ store, stripePromise }) => {
       </section>
       {/* CHECKOUT FORM */}
       {clientSecret && (
-        <Elements
-          stripe={stripePromise}
-          options={{ clientSecret, appearance, loader }}
-        >
+        <Elements stripe={stripePromise} options={options}>
           <section className='mt-4 p-8'>
             <Title text='payment details' />
             <CheckoutForm store={store} />
