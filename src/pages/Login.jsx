@@ -1,5 +1,10 @@
 import { Form, Link, redirect } from 'react-router-dom';
-import { PasswordInput, FormInput, SubmitButton } from '../components';
+import {
+  PasswordInput,
+  FormInput,
+  SubmitButton,
+  DemoUserLogin,
+} from '../components';
 import { customFetch } from '../utilities/customFetch';
 import { toast } from 'react-toastify';
 // state management
@@ -34,6 +39,7 @@ const Login = () => {
   return (
     <main className='min-h-screen grid place-items-center'>
       <div className='p-12 md:p-20 md:px-16 md:py-20 bg-neutral shadow-2xl w-full max-w-md md:max-w-lg transition-all'>
+        {/* LOGIN FORM */}
         <Form method='post' className='flex flex-col gap-y-8'>
           <h1 className='text-center uppercase font-bold text-4xl text-neutral-content'>
             login
@@ -50,7 +56,10 @@ const Login = () => {
           </div>
           <SubmitButton text='sign in' />
         </Form>
+        {/* DEMO USER */}
+        <DemoUserLogin />
         <hr className='mt-4' />
+        {/* REGISTER */}
         <p className='my-2 text-center font-semibold uppercase'>or</p>
         <Link to='/register' className='btn btn-block btn-secondary uppercase'>
           register

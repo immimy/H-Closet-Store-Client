@@ -80,7 +80,7 @@ const router = createBrowserRouter([
         path: '/cart',
         element: <Cart />,
         loader: cartLoader(store),
-        action: cartAction(store),
+        action: cartAction({ store, queryClient }),
       },
       {
         path: '/checkout',

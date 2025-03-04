@@ -26,7 +26,7 @@ export const loader = (store) => {
   };
 };
 
-export const action = (store) => {
+export const action = ({ store, queryClient }) => {
   return async ({ request }) => {
     const formData = await request.formData();
     const { firstName, lastName, address, giftService, paymentMethod } =
@@ -35,6 +35,9 @@ export const action = (store) => {
     const { cartItems, shippingFee } = store.getState().cart;
 
     try {
+      // Clear all queries that query key begin with 'orders'.
+      await queryClient.removeQueries({ queryKey: ['orders'] });
+
       const { data } = await customFetch.post('/orders', {
         cartItems,
         shippingFee,
@@ -117,14 +120,12 @@ const Cart = () => {
             hrColor='border-base-content'
           />
           <div className='p-4'>
-            {/* ❌⛔ close required temporarily */}
             <FormInput
               title='first name'
               name='firstName'
               type='text'
               size='input-sm'
               required={true}
-              defaultValue='Chris'
             />
             <FormInput
               title='last name'
@@ -132,13 +133,8 @@ const Cart = () => {
               type='text'
               size='input-sm'
               required={true}
-              defaultValue='Redfield'
             />
-            <FormTextArea
-              title='address'
-              required={true}
-              defaultValue='Somewhere the rock exists :)'
-            />
+            <FormTextArea title='address' required={true} />
           </div>
         </section>
         {/* ORDER SUMMARY */}

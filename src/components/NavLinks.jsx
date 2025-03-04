@@ -1,9 +1,13 @@
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const NavLinks = ({ links }) => {
   const { user } = useSelector((store) => store.user);
   const displayWhenLoginRoutes = ['/orders'];
+
+  // Disable Orders link when client is checking out.
+  const location = useLocation();
+  const isDisabled = location.pathname.startsWith('/checkout');
 
   const handleMouseLeavingProductsMenu = (e) => {
     // select element
@@ -83,7 +87,12 @@ const NavLinks = ({ links }) => {
         }
         return (
           <li key={id}>
-            <Link to={path} className='focus:text-secondary-content'>
+            <Link
+              to={path}
+              className={`focus:text-secondary-content ${
+                path === '/orders' && isDisabled && 'pointer-events-none'
+              }`}
+            >
               {name}
             </Link>
           </li>

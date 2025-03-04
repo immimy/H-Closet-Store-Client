@@ -14,8 +14,11 @@ import {
 } from '@stripe/react-stripe-js';
 import { clearCart, deleteOrder } from '../features/cart/cartSlice';
 import { customFetch } from '../utilities';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CheckoutForm = ({ store }) => {
+  const queryClient = useQueryClient();
+
   const { orderID, clientSecret, continueOrder } = useLoaderData();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -84,6 +87,9 @@ const CheckoutForm = ({ store }) => {
     return blocker.reset();
   };
   const handleConfirmLeave = async () => {
+    // Clear all queries that query key begin with 'orders'.
+    await queryClient.removeQueries({ queryKey: ['orders'] });
+
     if (orderID && clientSecret) {
       store.dispatch(
         deleteOrder({ orderID, clientSecret, orderStatus: 'Failed' })
@@ -103,6 +109,7 @@ const CheckoutForm = ({ store }) => {
         toast.error(errorMessage);
       }
     }
+
     return blocker.proceed();
   };
 
