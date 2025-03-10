@@ -21,6 +21,15 @@ export const loader = (store) => {
     if (orderID) {
       try {
         const { data } = await customFetch.get(`orders/${orderID}`);
+
+        // Redirect if checkout timed out.
+        const countDownDate =
+          new Date(data.order.createdAt).getTime() + 1000 * 60 * 60 * 24;
+        if (countDownDate - Date.now() < 0) {
+          toast.error('Checkout timed out.');
+          return redirect('/');
+        }
+
         // Return result here is used to differentiate between continued checkout and general checkout.
         return { continueOrder: data.order };
       } catch (error) {
