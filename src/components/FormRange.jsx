@@ -3,7 +3,7 @@ import { formattedPrice } from '../utilities/formatting';
 
 const FormRange = ({ title, name, searchParams }) => {
   const minPrice = 0;
-  const maxPrice = 200;
+  const maxPrice = 1000;
   const priceStep = 10;
   const [selectedPrice, setSelectedPrice] = useState(
     searchParams?.[name] || maxPrice

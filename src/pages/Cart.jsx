@@ -70,8 +70,14 @@ export const action = ({ store, queryClient }) => {
 };
 
 const Cart = () => {
-  const { cartItems, cartItemsData, cartTotal, shippingFee, orderTotal } =
-    useSelector((store) => store.cart);
+  const {
+    cartItems,
+    cartItemsData,
+    cartTotal,
+    shippingFee,
+    orderTotal,
+    discounts,
+  } = useSelector((store) => store.cart);
 
   return (
     <div className='align-element py-8 lg:py-16 text-secondary-content lg:grid lg:grid-cols-3'>
@@ -159,6 +165,10 @@ const Cart = () => {
                   500
                 )} to obtain free shipping.`
               }
+            />
+            <OrderSummaryList
+              title='discounts'
+              value={`-${formattedPrice(discounts)}`}
             />
             <OrderSummaryList
               title='total'

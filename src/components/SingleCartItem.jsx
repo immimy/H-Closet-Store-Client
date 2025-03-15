@@ -22,10 +22,12 @@ const SingleCartItem = ({
     price,
     amount,
     numberInStock,
+    sellingPrice,
+    isOnSale,
+    discount,
   } = cartItem;
   const option = cartItemData?.option;
   const inventory = cartItemData?.inventory;
-  // const { option, inventory } = cartItemData;
 
   const handleRemoveCartItem = (cartID) => {
     dispatch(removeItem({ cartID }));
@@ -89,7 +91,23 @@ const SingleCartItem = ({
             />
           )}
           {/* PRICE */}
-          <SingleCartItemPanel title='price' data={formattedPrice(price)} />
+          <SingleCartItemPanel
+            title='price'
+            data={!isOnSale && formattedPrice(sellingPrice)}
+            element={
+              isOnSale && (
+                <div className='pb-4 relative flex items-center gap-x-1'>
+                  <p>{formattedPrice(sellingPrice)}</p>
+                  <span className='badge badge-warning badge-xs font-medium'>
+                    -{discount}%
+                  </span>
+                  <span className='line-through text-sm absolute top-1/2'>
+                    {formattedPrice(price)}
+                  </span>
+                </div>
+              )
+            }
+          />
           {/* AMOUNT */}
           <SingleCartItemPanel
             title='amount'
@@ -113,7 +131,7 @@ const SingleCartItem = ({
           {showSubtotal && (
             <SingleCartItemPanel
               title='subtotal'
-              data={formattedPrice(price * amount)}
+              data={formattedPrice(sellingPrice * amount)}
             />
           )}
           {/* REMOVE BUTTON */}

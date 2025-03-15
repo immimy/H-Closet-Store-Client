@@ -11,6 +11,7 @@ const OrderSummaryContainer = ({
   giftService,
   paymentMethod,
   mdFlexDirection,
+  discounts,
 }) => {
   return (
     <div
@@ -50,6 +51,10 @@ const OrderSummaryContainer = ({
           <OrderSummaryList
             title='shipping fee'
             value={formattedPrice(shippingFee)}
+          />
+          <OrderSummaryList
+            title='discounts'
+            value={`-${formattedPrice(discounts)}`}
           />
           <OrderSummaryList title='total' value={formattedPrice(orderTotal)} />
           {/* GIFT SERVICE */}

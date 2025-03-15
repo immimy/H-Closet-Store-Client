@@ -60,7 +60,8 @@ const Checkout = ({ store, stripePromise }) => {
     clientSecret,
     giftService,
     name,
-    address;
+    address,
+    discounts;
 
   // Continued checkout
   const { continueOrder } = useLoaderData();
@@ -73,6 +74,7 @@ const Checkout = ({ store, stripePromise }) => {
     giftService = continueOrder.giftService;
     name = continueOrder.shippingAddress.name;
     address = continueOrder.shippingAddress.address;
+    discounts = continueOrder.discounts;
   } else {
     // General checkout
     const cartState = useSelector((store) => store.cart);
@@ -84,6 +86,7 @@ const Checkout = ({ store, stripePromise }) => {
     giftService = cartState.order.giftService;
     name = cartState.order.shippingAddress.name;
     address = cartState.order.shippingAddress.address;
+    discounts = cartState.discounts;
   }
 
   // Stripe options
@@ -111,6 +114,7 @@ const Checkout = ({ store, stripePromise }) => {
           orderTotal={orderTotal}
           giftService={giftService}
           mdFlexDirection='md:flex-row'
+          discounts={discounts}
         />
       </section>
       {/* CHECKOUT FORM */}

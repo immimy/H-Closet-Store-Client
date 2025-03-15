@@ -42,6 +42,7 @@ import { loader as completeLoader } from './pages/Complete';
 import { loader as cartLoader } from './pages/Cart';
 import { loader as ordersLoader } from './pages/Orders';
 import { loader as singleOrderLoader } from './pages/SingleOrder';
+import { loader as promotionLoader } from './pages/Promotion';
 // actions
 import { action as loginAction } from './pages/Login';
 import { action as registerAction } from './pages/Register';
@@ -75,7 +76,11 @@ const router = createBrowserRouter([
         element: <SingleProduct />,
         loader: singleProductsLoader(queryClient),
       },
-      { path: '/promotion', element: <Promotion /> },
+      {
+        path: '/promotion',
+        element: <Promotion />,
+        loader: promotionLoader(queryClient),
+      },
       {
         path: '/cart',
         element: <Cart />,

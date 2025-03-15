@@ -10,6 +10,7 @@ const initialState = {
   shippingFee: 50,
   orderTotal: 0,
   order: null,
+  discounts: 0,
 };
 
 const getCartState = () => {
@@ -126,18 +127,22 @@ const cartSlice = createSlice({
     calculateCart: (state) => {
       const cartItems = state.cartItems;
 
-      const { amount, total } = cartItems.reduce(
+      const { amount, total, discounts } = cartItems.reduce(
         (acc, item) => {
-          const { amount, price } = item;
+          const { amount, sellingPrice, price, isOnSale } = item;
           acc.amount += amount;
-          acc.total += amount * price;
+          acc.total += amount * sellingPrice;
+          if (isOnSale) {
+            acc.discounts += amount * (price - sellingPrice);
+          }
           return acc;
         },
-        { amount: 0, total: 0 }
+        { amount: 0, total: 0, discounts: 0 }
       );
 
       state.amount = amount;
       state.cartTotal = total;
+      state.discounts = discounts;
       state.shippingFee = state.cartTotal > 500 ? 0 : 50;
       state.orderTotal = state.cartTotal + state.shippingFee;
     },

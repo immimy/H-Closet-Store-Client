@@ -56,6 +56,9 @@ const SingleProduct = () => {
     color,
     price,
     inventory,
+    isOnSale,
+    discount,
+    sellingPrice,
   } = product;
 
   // Product option
@@ -99,7 +102,10 @@ const SingleProduct = () => {
       name,
       category,
       image,
-      price,
+      price: price,
+      sellingPrice: sellingPrice,
+      isOnSale,
+      discount: isOnSale ? discount : 0,
       numberInStock,
       ...data,
       amount,
@@ -165,12 +171,22 @@ const SingleProduct = () => {
           ) : (
             <>
               <div className='text-secondary-content font-medium text-lg mt-4'>
-                <p className='uppercase'>
-                  Price :
-                  <span className='ml-4 tracking-wider'>
-                    {formattedPrice(price)}
-                  </span>
-                </p>
+                <div className='flex flex-wrap items-center gap-2'>
+                  <p className='uppercase'>
+                    Price :
+                    <span className='ml-4 tracking-wider'>
+                      {formattedPrice(sellingPrice)}
+                    </span>
+                  </p>
+                  {isOnSale && (
+                    <>
+                      <span className='badge badge-warning'>-{discount}%</span>
+                      <span className='font-normal line-through text-base'>
+                        {formattedPrice(price)}
+                      </span>
+                    </>
+                  )}
+                </div>
                 <Form
                   className='flex flex-col gap-8 p-2 sm:p-4 md:p-6'
                   onSubmit={handleAddToCart}

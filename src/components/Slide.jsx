@@ -18,6 +18,9 @@ const Slide = ({ product }) => {
     size,
     color,
     inventory,
+    isOnSale,
+    discount,
+    sellingPrice,
   } = product;
 
   // Product option
@@ -42,7 +45,10 @@ const Slide = ({ product }) => {
     name,
     category,
     image,
-    price,
+    price: price,
+    sellingPrice: sellingPrice,
+    isOnSale,
+    discount: isOnSale ? discount : 0,
   };
   let cartItemData = {
     option: availableOption,
@@ -66,31 +72,47 @@ const Slide = ({ product }) => {
   };
 
   return (
-    <div className='card bg-primary shadow-2xl h-96 rounded-none text-primary-content'>
-      <figure className='h-64'>
+    <div className='bg-primary text-primary-content shadow-xl'>
+      {/* IMAGE */}
+      <figure className='h-56'>
         <Link to={`/products/${id}`}>
-          <img src={image} alt={name} className='min-h-64 object-cover' />
+          <img src={image} alt={name} className='h-full w-full object-cover' />
         </Link>
       </figure>
-      <div className='card-body text-center'>
-        <div className='grid place-items-center gap-y-2'>
-          <h1 className='card-title text-2xl font-semibold'>
+      {/* BODY */}
+      <div className='mt-4'>
+        {/* TITLE & PRICE */}
+        <div className='text-center'>
+          <h1 className='text-2xl font-semibold'>
             <Link to={`/products/${id}`}>{name}</Link>
           </h1>
-          <p className='text-xl font-normal'>{brand}</p>
-          <div className='mt-2 px-2 py-0.5 text-sm font-medium text-accent border border-accent w-fit tracking-wider'>
-            {formattedPrice(price)}
+          <p className='pt-1.5 text-xl font-normal'>{brand}</p>
+          <div className='pt-8 relative flex justify-center items-center'>
+            {isOnSale && (
+              <div className='flex flex-wrap items-center justify-center gap-x-1.5 absolute top-2 text-sm'>
+                <span className='font-light line-through'>
+                  {formattedPrice(price)}
+                </span>
+                <span className='badge badge-sm badge-warning font-medium'>
+                  -{discount.toFixed(0)}%
+                </span>
+              </div>
+            )}
+            <div className='px-2 py-0.5 font-medium text-accent border border-accent w-fit tracking-wider'>
+              {formattedPrice(sellingPrice)}
+            </div>
           </div>
         </div>
-        <div className='card-actions justify-end'>
+        {/* ADD TO CART || OUT OF STOCK */}
+        <div className='py-4 px-8 flex justify-end'>
           {isOutOfStock ? (
-            <h6 className='mt-2 font-normal text-xl tracking-widest capitalize italic text-accent'>
+            <h6 className='py-2.5 font-normal text-xl tracking-widest capitalize italic text-accent'>
               out of stock
             </h6>
           ) : (
             <button
               type='button'
-              className='btn btn-circle btn-sm btn-secondary text-xl'
+              className='btn btn-circle btn-secondary text-2xl'
               onClick={handleAddToCart}
             >
               <MdAddShoppingCart />

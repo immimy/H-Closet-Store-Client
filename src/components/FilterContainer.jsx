@@ -1,27 +1,16 @@
 import { Form, useLoaderData } from 'react-router-dom';
-import { FormInput, FormRange, FormSelect, SubmitButton } from '../components';
-import { BiSort } from 'react-icons/bi';
+import {
+  BrandTags,
+  FormInput,
+  FormRange,
+  FormSelect,
+  SortToggleButton,
+  SubmitButton,
+} from '../components';
 
 const FilterContainer = () => {
   const { meta, searchParams } = useLoaderData();
   const categoryOptions = meta.enum.categoryList;
-  const brandTags = meta.enum.brandList;
-  const sort = searchParams.sort || '-createdAt';
-  const brand = searchParams.brand || 'all';
-
-  const handleBrandTagClicked = (e) => {
-    const previousBrandInput = document.getElementById(brand);
-    previousBrandInput.setAttribute('disabled', true);
-
-    const currentBrandInput = e.currentTarget.querySelector('input');
-    currentBrandInput.removeAttribute('disabled');
-  };
-
-  const handlePriceSortToggle = (e) => {
-    const input = e.currentTarget.querySelector('input');
-    const priceSort = sort === 'price' ? '-price' : 'price';
-    input.setAttribute('value', priceSort);
-  };
 
   return (
     <Form>
@@ -50,37 +39,11 @@ const FilterContainer = () => {
           <SubmitButton text='search' />
         </div>
       </div>
-      {/* Brand Tags */}
       <div className='p-8 flex flex-wrap justify-center gap-4 relative'>
-        {brandTags.map((brandTag) => {
-          return (
-            <button
-              key={brandTag}
-              name='brand'
-              type='submit'
-              className='badge badge-lg rounded-none badge-warning p-2 sm:p-4 md:p-6 capitalize'
-              onClick={handleBrandTagClicked}
-            >
-              {brandTag}
-              <input
-                id={brandTag}
-                type='hidden'
-                name='brand'
-                value={brandTag}
-                disabled={brand !== brandTag}
-              />
-            </button>
-          );
-        })}
-        <button
-          name='sort'
-          type='submit'
-          className='absolute top-1/3 right-0'
-          onClick={handlePriceSortToggle}
-        >
-          <BiSort className='btn btn-sm btn-square btn-neutral p-1' />
-          <input type='hidden' name='sort' value={sort} />
-        </button>
+        {/* Brand Tags */}
+        <BrandTags />
+        {/* PRICE SORT TOGGLE */}
+        <SortToggleButton sortField='price' />
       </div>
     </Form>
   );

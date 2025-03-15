@@ -39,3 +39,5 @@ export { default as OrderAlert } from './OrderAlert';
 export { default as OrderDetailsContainer } from './OrderDetailsContainer';
 export { default as OrderSummaryContainer } from './OrderSummaryContainer';
 export { default as DemoUserLogin } from './DemoUserLogin';
+export { default as SortToggleButton } from './SortToggleButton';
+export { default as BrandTags } from './BrandTags';

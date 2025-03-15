@@ -16,6 +16,9 @@ const Card = ({ item }) => {
     size,
     color,
     inventory,
+    isOnSale,
+    discount,
+    sellingPrice,
   } = item;
 
   // Product option
@@ -40,7 +43,10 @@ const Card = ({ item }) => {
     name,
     category,
     image,
-    price,
+    price: price,
+    sellingPrice: sellingPrice,
+    isOnSale,
+    discount: isOnSale ? discount : 0,
   };
   let cartItemData = {
     option: availableOption,
@@ -71,14 +77,25 @@ const Card = ({ item }) => {
         </Link>
       </figure>
       <div className='card-body grid'>
-        <div className='grid [grid-template-columns: 1fr auto] items-center text-secondary-content'>
+        {/* <div className='grid [grid-template-columns: 1fr auto] items-center text-secondary-content'> */}
+        <div className='text-secondary-content'>
           <h1 className='card-title text-lg font-bold'>
             <Link to={`/products/${id}`}>{name}</Link>
           </h1>
-          <h6 className='col-start-2 row-span-2 text-right font-bold tracking-wider'>
-            {formattedPrice(price)}
-          </h6>
-          <p className='text-sm'>{brand}</p>
+          <h6 className='text-sm'>{brand}</h6>
+          <div className='mt-1.5 font-bold tracking-wider text-end'>
+            <h6>{formattedPrice(sellingPrice)}</h6>
+            {isOnSale && (
+              <div className='flex flex-wrap justify-end items-center gap-1.5'>
+                <h6 className='line-through text-base-300 text-sm font-normal'>
+                  {formattedPrice(price)}
+                </h6>
+                <span className='badge badge-sm badge-warning'>
+                  -{discount.toFixed(0)}%
+                </span>
+              </div>
+            )}
+          </div>
         </div>
         <div className='card-actions justify-end self-end'>
           {isOutOfStock ? (

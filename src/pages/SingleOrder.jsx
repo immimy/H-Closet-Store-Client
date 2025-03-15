@@ -42,6 +42,7 @@ const SingleOrder = () => {
     total: orderTotal,
     giftService,
     paymentMethod,
+    discounts,
   } = order;
   const { name, address } = order.shippingAddress;
 
@@ -143,6 +144,7 @@ const SingleOrder = () => {
           giftService={giftService}
           paymentMethod={paymentMethod}
           mdFlexDirection='md:flex-col'
+          discounts={discounts}
         />
       </section>
     </div>
