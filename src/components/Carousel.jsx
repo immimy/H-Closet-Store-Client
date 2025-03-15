@@ -10,8 +10,8 @@ const Carousel = ({ products }) => {
     autoplay: true,
     autoplaySpeed: 3000,
     cssEase: 'linear',
-    nextArrow: <CarouselArrow baseColor='#B7B7B7' />,
-    prevArrow: <CarouselArrow baseColor='#B7B7B7' />,
+    nextArrow: <CarouselArrow rotate='rotate-180' id='next-slide-arrow' />,
+    prevArrow: <CarouselArrow id='prev-slide-arrow' />,
     responsive: [
       {
         breakpoint: 1280,
@@ -40,8 +40,8 @@ const Carousel = ({ products }) => {
     ],
   };
   return (
-    <div className='pt-6'>
-      <Slider {...settings}>
+    <div className='py-6'>
+      <Slider {...settings} className='slider'>
         {products.map((item) => {
           return <Slide key={item._id} product={item} />;
         })}

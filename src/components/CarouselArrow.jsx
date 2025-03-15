@@ -1,16 +1,16 @@
-const CarouselArrow = (props) => {
-  const { className, style, onClick, baseColor } = props;
+import { HiOutlineChevronDoubleLeft } from 'react-icons/hi';
+
+const CarouselArrow = ({ onClick, rotate, id }) => {
   return (
     <div
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        background: baseColor,
-        borderRadius: '50%',
-      }}
+      id={id}
+      className={`next-slick-arrow ${rotate} transition-all`}
       onClick={onClick}
-    />
+    >
+      <div className='text-2xl btn btn-circle btn-accent btn-sm'>
+        <HiOutlineChevronDoubleLeft />
+      </div>
+    </div>
   );
 };
 

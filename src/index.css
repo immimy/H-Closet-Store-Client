@@ -7,3 +7,28 @@
     @apply mx-auto max-w-screen-xl px-8;
   }
 }
+
+/* Slider Arrow */
+.next-slick-arrow {
+  position: absolute;
+}
+#next-slide-arrow {
+  top: 103%;
+  left: 51%;
+  z-index: 10;
+}
+#prev-slide-arrow {
+  top: 103.5%;
+  right: 51%;
+  z-index: 10;
+}
+@media screen and (min-width: 1400px) {
+  #next-slide-arrow {
+    top: 50%;
+    left: 101%;
+  }
+  #prev-slide-arrow {
+    top: 50%;
+    right: 101%;
+  }
+}
