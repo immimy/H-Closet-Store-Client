@@ -125,7 +125,10 @@ const Cart = () => {
             textColor='text-base-content'
             hrColor='border-base-content'
           />
-          <div className='p-4'>
+          <div className='px-4 pt-2 text-sm text-error tracking-wide'>
+            * There are random fixed values, so just one letter will be fine.
+          </div>
+          <div className='px-4 pt-2 pb-4'>
             <FormInput
               title='first name'
               name='firstName'

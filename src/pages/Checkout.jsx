@@ -122,6 +122,10 @@ const Checkout = ({ store, stripePromise }) => {
         <Elements stripe={stripePromise} options={options}>
           <section className='mt-4 p-8'>
             <Title text='payment details' />
+            <div className='px-4 pt-2 text-sm text-error tracking-wide'>
+              * Use the 4242-4242-4242-4242 card number for fake payment;
+              nothing will be charged.
+            </div>
             <CheckoutForm store={store} />
           </section>
         </Elements>

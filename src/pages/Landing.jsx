@@ -1,4 +1,5 @@
-import { Carousel, Hero, Title } from '../components';
+import { useSelector } from 'react-redux';
+import { Alert, Carousel, Hero, Title } from '../components';
 import { customFetch } from '../utilities';
 import { useLoaderData } from 'react-router-dom';
 
@@ -22,12 +23,19 @@ export const loader = (queryClient) => {
 };
 
 const Landing = () => {
+  const { user } = useSelector((store) => store.user);
+  const isShowAlert = user && user.username !== 'demo' && user.role === 'user';
+
   const { products } = useLoaderData();
 
   return (
-    <div className='align-element mt-8 md:mt-12'>
+    <div className='align-element mt-8'>
+      {/* ALERT */}
+      {isShowAlert && (
+        <Alert text='Due to demo purpose, new registered accounts will last only 1 day.' />
+      )}
       {/* HERO */}
-      <section className='flex flex-col md:flex-row md:gap-x-8 lg:flex-row-reverse lg:gap-x-12'>
+      <section className='mt-8 flex flex-col md:flex-row md:gap-x-8 lg:flex-row-reverse lg:gap-x-12'>
         <Hero />
       </section>
       {/* BESTSELLER PRODUCTS */}

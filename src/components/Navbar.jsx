@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavLinks, NavDropdownLinks, CartModal } from '../components';
 import { navLinks } from '../data';
 
@@ -13,8 +13,11 @@ import { logoutUser } from '../features/user/userSlice';
 import { customFetch } from '../utilities/customFetch';
 import { toast } from 'react-toastify';
 import { clearCart } from '../features/cart/cartSlice';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Navbar = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { theme } = useSelector((store) => store.theme);
   const { user } = useSelector((store) => store.user);
@@ -28,7 +31,9 @@ const Navbar = () => {
     await customFetch.delete('/auth/logout');
     dispatch(logoutUser());
     dispatch(clearCart());
+    queryClient.removeQueries();
     toast.error('Logged out.');
+    return navigate('/');
   };
 
   return (
