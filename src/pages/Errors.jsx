@@ -1,11 +1,8 @@
 import { Link, useRouteError } from 'react-router-dom';
 import notFoundImg from '../assets/errors.svg';
 import errorsImg from '../assets/errors.svg';
-import { useDispatch } from 'react-redux';
-import { setTheme } from '../features/theme/themeSlice';
 
 const Errors = () => {
-  useDispatch()(setTheme());
   const error = useRouteError();
   console.log(error);
 
