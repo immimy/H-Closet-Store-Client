@@ -1,11 +1,11 @@
 import { Form, useLoaderData } from 'react-router-dom';
 import { customFetch } from '../utilities';
 import {
-  BrandTags,
   GridDisplay,
   NotFoundContainer,
   PaginationContainer,
   SortToggleButton,
+  Tags,
 } from '../components';
 
 const promotionProductsQuery = (searchParams) => {
@@ -34,7 +34,7 @@ export const loader = (queryClient) => {
 };
 
 const Promotion = () => {
-  const { data } = useLoaderData();
+  const { data, meta, searchParams } = useLoaderData();
 
   return (
     <div className='align-element mt-2 md:mt-6'>
@@ -43,7 +43,11 @@ const Promotion = () => {
           <Form>
             <div className='p-8 flex flex-wrap justify-center gap-4 relative'>
               {/* Brand Tags */}
-              <BrandTags />
+              <Tags
+                name='brand'
+                allTags={meta.enum.brandList}
+                selectedTag={searchParams.brand || 'all'}
+              />
               {/* PRICE SORT TOGGLE */}
               <SortToggleButton sortField='discount' />
             </div>

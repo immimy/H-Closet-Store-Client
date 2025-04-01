@@ -6,6 +6,7 @@ import {
   ProductAmountSelect,
   SubmitButton,
   ReviewContainer,
+  OverallRatingContainer,
 } from '../components';
 import {
   customFetch,
@@ -29,12 +30,38 @@ const singleProductQuery = (productID) => {
   };
 };
 
+const productReviewsQuery = ({ productID, searchParams }) => {
+  return {
+    queryKey: ['product', productID, 'reviews', searchParams],
+    queryFn: async () => {
+      const { data } = await customFetch(`products/${productID}/reviews`, {
+        params: searchParams,
+      });
+      return data;
+    },
+  };
+};
+
 export const loader =
   (queryClient) =>
-  async ({ params }) => {
+  async ({ request, params }) => {
+    const searchParams = Object.fromEntries(
+      new URL(request.url).searchParams.entries()
+    );
+
     const { id } = params;
-    const resp = await queryClient.ensureQueryData(singleProductQuery(id));
-    return resp.data;
+    const singleProduct = await queryClient.ensureQueryData(
+      singleProductQuery(id)
+    );
+    const productReviews = await queryClient.ensureQueryData(
+      productReviewsQuery({ productID: id, searchParams })
+    );
+    return {
+      singleProduct,
+      productReviews,
+      searchParams,
+      meta: productReviews.meta,
+    };
   };
 
 const SingleProduct = () => {
@@ -43,7 +70,7 @@ const SingleProduct = () => {
   // Toggle length of description
   const [isMoreDesc, setIsMoreDesc] = useState(false);
 
-  const { product } = useLoaderData();
+  const { singleProduct } = useLoaderData();
   const {
     _id: id,
     name,
@@ -59,7 +86,7 @@ const SingleProduct = () => {
     isOnSale,
     discount,
     sellingPrice,
-  } = product;
+  } = singleProduct.data.product;
 
   // Product option
   // - Clothes: size
@@ -121,7 +148,7 @@ const SingleProduct = () => {
 
   return (
     <div className='align-element mt-8 md:mt-12 px-8 md:px-16'>
-      <div className='grid md:grid-cols-2 justify-items-center gap-12'>
+      <section className='grid md:grid-cols-2 justify-items-center gap-12'>
         <figure className='max-w-2xl'>
           <img
             src={image}
@@ -230,10 +257,11 @@ const SingleProduct = () => {
             </>
           )}
         </div>
-      </div>
-      <div className='mt-6'>
+      </section>
+      <section className='mt-6'>
+        <OverallRatingContainer />
         <ReviewContainer />
-      </div>
+      </section>
     </div>
   );
 };

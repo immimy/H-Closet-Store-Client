@@ -14,3 +14,4 @@ export { default as Checkout } from './Checkout';
 export { default as Orders } from './Orders';
 export { default as Complete } from './Complete';
 export { default as SingleOrder } from './SingleOrder';
+export { default as Reviews } from './Reviews';

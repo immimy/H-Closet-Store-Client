@@ -9,7 +9,7 @@ import {
   OrderSummaryContainer,
 } from '../components';
 
-const singleOrderQuery = (id) => {
+export const singleOrderQuery = (id) => {
   return {
     queryKey: ['order', id],
     queryFn: async () => {

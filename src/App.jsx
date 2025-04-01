@@ -18,6 +18,7 @@ import {
   Orders,
   Complete,
   SingleOrder,
+  Reviews,
 } from './pages';
 
 // query client
@@ -43,12 +44,14 @@ import { loader as cartLoader } from './pages/Cart';
 import { loader as ordersLoader } from './pages/Orders';
 import { loader as singleOrderLoader } from './pages/SingleOrder';
 import { loader as promotionLoader } from './pages/Promotion';
+import { loader as reviewsLoader } from './pages/Reviews';
 // actions
 import { action as loginAction } from './pages/Login';
 import { action as registerAction } from './pages/Register';
 import { action as forgotPasswordAction } from './pages/ForgotPassword';
 import { action as resetPasswordAction } from './pages/ResetPassword';
 import { action as cartAction } from './pages/Cart';
+import { action as reviewsAction } from './pages/Reviews';
 
 // redux
 import { store } from './store';
@@ -67,41 +70,47 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Landing />, loader: landingLoader(queryClient) },
       {
-        path: '/products',
+        path: 'products',
         element: <Products />,
         loader: productsLoader(queryClient),
       },
       {
-        path: '/products/:id',
+        path: 'products/:id',
         element: <SingleProduct />,
         loader: singleProductsLoader(queryClient),
       },
       {
-        path: '/promotion',
+        path: 'promotion',
         element: <Promotion />,
         loader: promotionLoader(queryClient),
       },
       {
-        path: '/cart',
+        path: 'cart',
         element: <Cart />,
         loader: cartLoader(store),
         action: cartAction({ store, queryClient }),
       },
       {
-        path: '/checkout',
+        path: 'checkout',
         element: <Checkout store={store} stripePromise={stripePromise} />,
         loader: checkoutLoader(store),
       },
 
       {
-        path: '/orders',
+        path: 'orders',
         element: <Orders />,
         loader: ordersLoader({ store, queryClient }),
       },
       {
-        path: '/orders/:id',
+        path: 'orders/:id/',
         element: <SingleOrder />,
         loader: singleOrderLoader({ store, queryClient }),
+      },
+      {
+        path: 'reviews/:id',
+        element: <Reviews />,
+        loader: reviewsLoader({ store, queryClient }),
+        action: reviewsAction({ queryClient }),
       },
     ],
   },

@@ -2,12 +2,15 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
+import { setScrollY } from '../features/scroll/scrollSlice';
 
-const Pagination = () => {
+const Pagination = ({ offsetTopElementID }) => {
+  const dispatch = useDispatch();
   const { meta } = useLoaderData();
-  const currentPage = meta.pagination.currentPage;
-  const lastPage = meta.pagination.totalPage;
+  const currentPage = meta?.pagination.currentPage;
+  const lastPage = meta?.pagination.totalPage;
 
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
@@ -16,6 +19,16 @@ const Pagination = () => {
     const urlSearchParams = new URLSearchParams(search);
     urlSearchParams.set('page', targetPage);
     navigate(`${pathname}?${urlSearchParams.toString()}`);
+
+    // Keep scroll Y position
+    if (offsetTopElementID) {
+      dispatch(
+        setScrollY({
+          scrollYPosition:
+            document.getElementById(offsetTopElementID).offsetTop,
+        })
+      );
+    }
   };
 
   const createPageButton = (page, sepKey) => {

@@ -1,11 +1,11 @@
 import { Form, useLoaderData } from 'react-router-dom';
 import {
-  BrandTags,
   FormInput,
   FormRange,
   FormSelect,
   SortToggleButton,
   SubmitButton,
+  Tags,
 } from '../components';
 
 const FilterContainer = () => {
@@ -41,7 +41,11 @@ const FilterContainer = () => {
       </div>
       <div className='p-8 flex flex-wrap justify-center gap-4 relative'>
         {/* Brand Tags */}
-        <BrandTags />
+        <Tags
+          name='brand'
+          allTags={meta.enum.brandList}
+          selectedTag={searchParams.brand || 'all'}
+        />
         {/* PRICE SORT TOGGLE */}
         <SortToggleButton sortField='price' />
       </div>
