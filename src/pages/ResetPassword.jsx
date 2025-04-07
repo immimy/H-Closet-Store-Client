@@ -3,9 +3,6 @@ import { PasswordInput, SubmitButton } from '../components';
 import { customFetch } from '../utilities';
 import { toast } from 'react-toastify';
 import { RiLockPasswordFill } from 'react-icons/ri';
-// state management
-import { useDispatch } from 'react-redux';
-import { setTheme } from '../features/theme/themeSlice';
 
 export const loader = async ({ request }) => {
   const searchParams = Object.fromEntries(
@@ -41,8 +38,6 @@ export const action = async ({ request }) => {
 };
 
 const ResetPassword = () => {
-  const dispatch = useDispatch();
-  dispatch(setTheme());
   const { email, token } = useLoaderData();
 
   return (

@@ -7,9 +7,6 @@ import {
 } from '../components';
 import { customFetch } from '../utilities/customFetch';
 import { toast } from 'react-toastify';
-// state management
-import { useDispatch } from 'react-redux';
-import { setTheme } from '../features/theme/themeSlice';
 import { loginUser } from '../features/user/userSlice';
 
 export const action = (store) => {
@@ -33,9 +30,6 @@ export const action = (store) => {
 };
 
 const Login = () => {
-  const dispatch = useDispatch();
-  dispatch(setTheme());
-
   return (
     <main className='min-h-screen grid place-items-center'>
       <div className='p-12 md:p-20 md:px-16 md:py-20 bg-neutral shadow-2xl w-full max-w-md md:max-w-lg transition-all'>

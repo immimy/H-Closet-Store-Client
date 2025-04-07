@@ -3,9 +3,6 @@ import { FormInput, SubmitButton } from '../components';
 import { customFetch } from '../utilities';
 import { toast } from 'react-toastify';
 import { RiLockPasswordFill } from 'react-icons/ri';
-// state management
-import { useDispatch } from 'react-redux';
-import { setTheme } from '../features/theme/themeSlice';
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -22,9 +19,6 @@ export const action = async ({ request }) => {
 };
 
 const ForgotPassword = () => {
-  const dispatch = useDispatch();
-  dispatch(setTheme());
-
   return (
     <main className='min-h-screen flex justify-center'>
       <Form

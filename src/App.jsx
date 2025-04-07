@@ -55,6 +55,8 @@ import { action as reviewsAction } from './pages/Reviews';
 
 // redux
 import { store } from './store';
+import { useDispatch } from 'react-redux';
+import { setTheme } from './features/theme/themeSlice';
 
 // stripe
 import { loadStripe } from '@stripe/stripe-js';
@@ -154,6 +156,9 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const dispatch = useDispatch();
+  dispatch(setTheme());
+
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
