@@ -60,6 +60,7 @@ import { setTheme } from './features/theme/themeSlice';
 
 // stripe
 import { loadStripe } from '@stripe/stripe-js';
+import { showCurrentUser } from './features/user/userSlice';
 const stripePromise = loadStripe(
   'pk_test_51OvGfIP7SK6yH568WZiu6JrtBIopOwGr2YsEdkYOvt5SBU8I8trqXxlZXuhPcjDcIu4HRrqKva7n1qGbh2JGiTft005FhDO75Y'
 );
@@ -70,7 +71,11 @@ const router = createBrowserRouter([
     element: <HomeLayout />,
     errorElement: <Errors />,
     children: [
-      { index: true, element: <Landing />, loader: landingLoader(queryClient) },
+      {
+        index: true,
+        element: <Landing />,
+        loader: landingLoader(queryClient),
+      },
       {
         path: 'products',
         element: <Products />,
@@ -158,6 +163,7 @@ const router = createBrowserRouter([
 const App = () => {
   const dispatch = useDispatch();
   dispatch(setTheme());
+  dispatch(showCurrentUser());
 
   return (
     <QueryClientProvider client={queryClient}>

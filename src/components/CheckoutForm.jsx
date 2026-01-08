@@ -42,8 +42,8 @@ const CheckoutForm = ({ store }) => {
       confirmParams: {
         // For continued checkout, pass order ID as query params.
         return_url: continueOrder
-          ? `http://localhost:5173/complete?order=${continueOrder._id}`
-          : 'http://localhost:5173/complete',
+          ? `${window.location.origin}/complete?order=${continueOrder._id}`
+          : `${window.location.origin}/complete`,
       },
     });
 

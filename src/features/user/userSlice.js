@@ -1,24 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { customFetch } from '../../utilities/';
 
-// Delete user state when refresh token cookie is expired.
-const clearUser = async () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (user) {
+// Retrieve user data directly from the server
+export const showCurrentUser = createAsyncThunk(
+  'user/showCurrentUser',
+  async (_, thunkAPI) => {
     try {
-      await customFetch.get('/users/showMe');
+      const { username, email, role } = await customFetch.get('/users/showMe');
+      const newUser = { username, email, role };
+      return newUser;
     } catch (error) {
-      localStorage.removeItem('user');
+      return thunkAPI.rejectWithValue(null);
     }
   }
-};
-await clearUser();
+);
 
-const getLocalStorage = () => {
-  return JSON.parse(localStorage.getItem('user')) || null;
-};
-
-const initialState = { user: getLocalStorage() };
+const initialState = { user: null, isLoading: true };
 
 const userSlice = createSlice({
   name: 'user',
@@ -28,12 +25,24 @@ const userSlice = createSlice({
       const { username, email, role } = action.payload;
       const newUser = { username, email, role };
       state.user = newUser;
-      localStorage.setItem('user', JSON.stringify(newUser));
     },
     logoutUser: (state) => {
       state.user = null;
-      localStorage.removeItem('user');
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(showCurrentUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(showCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(showCurrentUser.rejected, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+      });
   },
 });
 
