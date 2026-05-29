@@ -6,13 +6,14 @@ export const showCurrentUser = createAsyncThunk(
   'user/showCurrentUser',
   async (_, thunkAPI) => {
     try {
-      const { username, email, role } = await customFetch.get('/users/showMe');
+      const response = await customFetch.get('/users/showMe');
+      const { username, email, role } = response.data.user;
       const newUser = { username, email, role };
       return newUser;
     } catch (error) {
       return thunkAPI.rejectWithValue(null);
     }
-  }
+  },
 );
 
 const initialState = { user: null, isLoading: true };

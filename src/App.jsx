@@ -61,8 +61,9 @@ import { setTheme } from './features/theme/themeSlice';
 // stripe
 import { loadStripe } from '@stripe/stripe-js';
 import { showCurrentUser } from './features/user/userSlice';
+import { useEffect } from 'react';
 const stripePromise = loadStripe(
-  'pk_test_51OvGfIP7SK6yH568WZiu6JrtBIopOwGr2YsEdkYOvt5SBU8I8trqXxlZXuhPcjDcIu4HRrqKva7n1qGbh2JGiTft005FhDO75Y'
+  'pk_test_51OvGfIP7SK6yH568WZiu6JrtBIopOwGr2YsEdkYOvt5SBU8I8trqXxlZXuhPcjDcIu4HRrqKva7n1qGbh2JGiTft005FhDO75Y',
 );
 
 const router = createBrowserRouter([
@@ -162,8 +163,12 @@ const router = createBrowserRouter([
 
 const App = () => {
   const dispatch = useDispatch();
-  dispatch(setTheme());
-  dispatch(showCurrentUser());
+
+  useEffect(() => {
+    if (!dispatch) return;
+    dispatch(setTheme());
+    dispatch(showCurrentUser());
+  }, [dispatch]);
 
   return (
     <QueryClientProvider client={queryClient}>
